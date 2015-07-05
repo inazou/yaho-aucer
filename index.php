@@ -1,8 +1,8 @@
 <?php
 
-include_once 'difine.php';
-include_once '/classes/baseIndex.php';
-$index = new baceIndex();
-
-
-echo "ヤフオク検索サイト";
+include_once 'define.php';
+include_once (topDir.'/classes/baseIndex.php');
+$baseIndex = new baceIndex();
+$dir = $baseIndex->getTempDir();
+include_once $dir.'/index.tpl';
+//echo "ヤフオク検索サイト";
