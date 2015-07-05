@@ -8,6 +8,7 @@ margin: 0;
 /* --- ボックス --- */
 form.search div {
 width: 388px; /* ボックスの幅 */
+ margin: 0 auto;
 padding: 1px 0; /* ボックスのパディング（上下、左右） */
 background-color: #ffffff; /* ボックスの背景色 */
 border: 1px #808080 solid; /* ボックスの境界線 */
