@@ -32,7 +32,7 @@ form.search input.btn {
 width: 80px; /* ボタンの幅 */
 height: 1.8em; /* ボタンの高さ */
 padding: 0;
-background: #c08000 url(../../images/btn05.gif); /* ボタンの背景 */
+background: #c08000 url(../images/btn05.gif); /* ボタンの背景 */
 border: 1px #c08000 inset; /* ボタンの境界線 */
 font-weight: bold;
 color: #000000;
