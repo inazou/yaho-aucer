@@ -81,6 +81,21 @@ class basePage{
     public function getTempDir(){
         return $this->tempDir;
     }
-
+    
+    /**
+     * ヌルバイトを削除
+     * @access public
+     * @param mixed
+     * @return mixed
+     */
+    public function escapeNullByte($arr) {
+        if (is_array($arr) ){
+            foreach ($arr as $key => $value) {
+                $esc[str_replace("\0", "", $key)] = str_replace("\0", "", $value);
+            }
+            return $esc;    
+        }
+        return str_replace("\0", "", $arr);
+    }
 
 }
