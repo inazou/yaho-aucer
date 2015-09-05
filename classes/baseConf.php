@@ -7,14 +7,50 @@ class baseConf extends basePage{
     const appid = "dj0zaiZpPWRzTGF1cmQzamE4TSZzPWNvbnN1bWVyc2VjcmV0Jng9MzI-";
     
     const sendUrl = "http://auctions.yahooapis.jp/AuctionWebService/V2/search";
+    
+    /**
+     *カテゴリーのhtmlを格納
+     * @var string
+     */
+    private $category = "";
+    
+    /**
+     *並べ替えのhtmlを格納
+     * @var string
+     */
+    private $sort = "";
+    
+    /**
+     * メッセージを格納
+     * @var string 
+     */
+    private $msg = "";
 
-        public function __construct() {
+
+    /**
+     * 検索結果のhtmlを格納
+     * @var string 
+     */
+    private $result = "";
+    
+    
+    /**
+     * 検索結果の商品
+     * @var string
+     */
+    private $resItem = "";
+
+    public function __construct() {
         parent::__construct();
+        $this->createCategory();
+        $this->createSort();
         
         if(isset($_GET)){
             
             $this->checkGet(); 
             
+        } else {
+            $this->result = "ヤフーオークションからの検索結果を表示します。";
         }
             
         
@@ -29,22 +65,30 @@ class baseConf extends basePage{
             
         }
         unset($key, $value);
-        var_dump($cnv);
+        //var_dump($cnv);
         $post = $this->escapeNullByte($cnv);
         $p = print_r($post, TRUE);
-        
+        if(!isset($post['query'])){
+            $this->result = "ヤフーオークションからの検索結果を表示します。";
+            return;
+        } elseif ($post['query'] == "") {
+            $this->result = "検索する文字列を入力してください。";
+            return;
+        } else {
+            $this->result = '検索ワード:"'. $post['query']. '"';
+        }
         $post['output'] = "xml";
-        $this->send($post);
+        $res = $this->send($post);
+        var_dump($res);
+        $this->createDisp($res);
         
-        
-        
-        
+
     }
     /**
      * curlでpost
      * @access private
      * @param array $param
-     * @return boolean 
+     * @return mixed
      */
     private function send($param) {
         
@@ -53,15 +97,228 @@ class baseConf extends basePage{
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($param));
         curl_setopt($ch,CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
         
         $res = curl_exec($ch);
         curl_close($ch);
-        var_dump($res);
+        if($res == FALSE){
+            $this->result = "検索結果の取得に失敗しました。時間をおいて再度検索してください。";
+            return FALSE;
+        }  else {
+            return $res;
+        }
+        
         
         
         
     }
+    /**
+     * 詳細検索のカテゴリを作成
+     * @access private
+     * @param  
+     */
+    private function createCategory(){
+        $cat = array('コンピュータ' => 23336, 
+            '家電、AV、カメラ' => 23632, 
+            '音楽' => 22152, 
+            '本、雑誌' => 21600, 
+            '映画、ビデオ' => 21964, 
+            'おもちゃ、ゲーム' => 25464,
+            'ホビー、カルチャー' => 24242,
+            'アンティーク、コレクション' => 20000,
+            'スポーツ、レジャー' => 24698,
+            '自動車、オートバイ' => 26318,
+            'ファッション' => 23000,
+            'アクセサリー、時計' => 23140,
+            'ビューティー、ヘルスケア' => 42177,
+            '食品、飲料' => 23976, 
+            '住まい、インテリア' => 24198,
+            'ペット、生き物' => 2084055844,
+            '事務、店舗用品' => 22896,
+            '花、園芸' => 26086,
+            'チケット、金券、宿泊予約' => 2084043920,
+            'ベビー用品' => 24202,
+            'タレントグッズ' => 2084032594,
+            'コミック、アニメグッズ' => 20060,
+            '不動産' => 2084060731,
+            'チャリティー' => 2084217893,
+            'その他' => 26084);
+        
+        foreach ($cat as $key => $value) {
+            $this->category .= '<option value ="'. $value . '">'. $key . '</option>';
+        }
+        
+        return TRUE;
+    }
     
+    /**
+     * 詳細検索のソートを作成
+     * @access private
+     * @param  
+     */
+    private function createSort(){
+        // 画像の有無、アフィリエイトも選択できるが、今はしない
+        $so = array('終了時間' => 'end',  
+            '入札数' => 'bids', 
+            '現在価格' => 'cbids', 
+            '即決価格' => 'bidorbuy');
+        
+        foreach ($so as $key => $value) {
+            $this->sort .= '<option value ="'. $value . '">'. $key . '</option>';
+        }
+        
+        return;
+    }
+    /**
+     * 検索結果をスクレーピングしhtmlを作成
+     * @access private
+     * @param string
+     * @return 
+     */
+    private function createDisp($xml){
+        $dom = new DOMDocument();
+        $dom->preserveWhiteSpace = FALSE;
+        $dom->formatOutput = TRUE;
+        $dom->loadXML($xml);
+        $xpath = new DOMXPath($dom);
+        $xpath->registerNamespace('x', 'urn:yahoo:jp:auc:search');
+        $totalResultsAvailable = $xpath->evaluate('string(//x:ResultSet/@totalResultsAvailable)');
+        echo $totalResultsAvailable.'<br>';
+        if($totalResultsAvailable == 0){
+            $this->msg = "検索結果: ". $totalResultsAvailable. "件";
+            return;
+        } else {
+            $this->msg = "検索結果: ". $totalResultsAvailable. "件";  
+        }
+        $totalResultsReturned = $xpath->evaluate('string(//x:ResultSet/@totalResultsReturned)');
+        echo $totalResultsReturned.'<br>';
+        $firstResultPosition = $xpath->evaluate('string(//x:ResultSet/@firstResultPosition)');
+        echo $firstResultPosition.'<br>';
+        $itemcount = $xpath->query('//x:Result/x:Item')->length;
+        print_r($itemcount);
+        for($i = 1;$i <= $itemcount;$i++){
+            $reaarr[$i]['AuctionID'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:AuctionID)');
+            $reaarr[$i]['Title'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Title)');
+            $reaarr[$i]['Id'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Seller/x:Id)');
+            $reaarr[$i]['AuctionItemUrl'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:AuctionItemUrl)');
+            $reaarr[$i]['Image'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image)');
+            $reaarr[$i]['ImageWidth'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image/@width)');
+            $reaarr[$i]['ImageHeight'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image/@height)');
+            $reaarr[$i]['CurrentPrice'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:CurrentPrice)');
+            $reaarr[$i]['Bids'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Bids)');
+            $reaarr[$i]['EndTime'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:EndTime)');
+            $reaarr[$i]['BidOrBuy'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:BidOrBuy)');
+            $icon[$i]['FeaturedIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:FeaturedIcon)');
+            $icon[$i]['NewIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:NewIcon)');
+            $icon[$i]['StoreIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:StoreIcon)');
+            $icon[$i]['CheckIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:CheckIcon)');
+            $icon[$i]['PublicIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:PublicIcon)');
+            $icon[$i]['FreeshippingIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:FreeshippingIcon)');
+            $icon[$i]['NewItemIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:NewItemIcon)');
+            $icon[$i]['WrappingIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:WrappingIcon)');
+            $icon[$i]['BuynowIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:BuynowIcon)');
+            $icon[$i]['EasyPaymentIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:EasyPaymentIcon)');
+            $icon[$i]['GiftIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:GiftIcon)');
+            $icon[$i]['PointIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:PointIcon)');
+            
+            
+        }
+        var_dump($reaarr);
+        $this->createItemHtml($reaarr, $icon);
+        return;
+    }
+    
+    /**
+     * 検索結果のアイテムの表示用htmlを作成
+     * @access private
+     * @param array $res
+     */
+    private function createItemHtml($res, $icon){
+        for($i = 1; $i <= count($res); $i++){
+            $this->resItem .= "<article><a href=\"". $res[$i]['AuctionItemUrl']. "\"><h1>". $res[$i]['Title']. " ";
+            foreach ($icon[$i] as $key => $val){
+                if(!empty($icon[$i][$key])){
+                    $this->resItem .= "<img src=\"". $val. "\" /> ";
+                }
+            }
+            $this->resItem .= "</h1><figure><div><img src=\"". $res[$i]['Image']. "\" width=\"". $res[$i]['ImageWidth']. "\" height=\"". $res[$i]['ImageHeight']. "\" alt=\"\" /></div></figure><p>出品者: ". $res[$i]['Id']. "</p><p>現在価格: ". floor($res[$i]['CurrentPrice']). "円</p>";//<p>入札件数: xx</p><p>残り時間: x日</p>;
+            if(!empty($res[$i]['BidOrBuy'])){
+                $this->resItem .= "<p>即決価格: ". floor($res[$i]['BidOrBuy']). "円</p>";
+            }
+            $this->resItem .= "<p>入札件数: ". $res[$i]['Bids']. "</p><p>残り時間: ". $this->createTime($res[$i]['EndTime']). "</p>";
+            
+            $this->resItem .= "</a></article>";
+        }
+        return;
+    }
+    
+    
+    /**
+     * RFC3339をunixtimeに変換して残り時間を計算
+     * @access private
+     * @param string $time
+     * @return string
+     */
+    private function createTime($time){
+        list($year, $month, $day) = explode("-", $time);
+        list($day, $h) = explode("T", $day);
+        list($h, $m, $s) = explode(":", $h);
+        list($s, $t) = explode("+", $s);
+        $endtime = mktime($h, $m, $s, $month, $day, $year);
+        $end = $endtime - time();
+        $d = $end / 3600 / 24;
+        $h = $end / 3600;
+        $m = $end / 60 - floor($h)*60;
+        $h = $end / 3600 - floor($d)*24;
+        $date = "";
+        if(floor($d) != 0){
+            $date .= floor($d). "日 "; 
+        }
+        $date .= floor($h). "時間". floor($m). "分";
+        return $date;
+    }
+            
+
+    /**
+     * カテゴリのhtmlを取得
+     * @access public
+     * @return type
+     */
+    public function getCategory(){
+        return $this->category;
+    }
+    /**
+     * ソートのhtmlを取得
+     * @access public
+     * @return type
+     */
+    public function getSort(){
+        return $this->sort;
+    }
+    /**
+     * 表示用の検索結果を取得
+     * @access public
+     * @return type
+     */
+    public function getResult(){
+        return $this->result;
+    }
+    /**
+     * 表示用の検索結果のアイテムを取得
+     * @access public
+     * @return type
+     */
+    public function getResItem(){
+        return $this->resItem;
+    }
+     /**
+     * 表示用の検索結果のアイテムを取得
+     * @access public
+     * @return type
+     */
+    public function getMsg(){
+        return $this->msg;
+    }
     
 }
 

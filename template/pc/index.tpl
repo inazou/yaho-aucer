@@ -9,9 +9,9 @@
                 function show(inputData){
                     var objID=document.getElementById( "layer_" + inputData );
                     var buttonID=document.getElementById( "category_" + inputData );
-                    if(objID.className=='close') {
+                    if(objID.className =='close') {
                         objID.style.display='block';
-                        objID.className='open';
+                        objID.className ='open';
                     }else{
                         objID.style.display='none';
                         objID.className='close';
@@ -64,11 +64,4 @@
                         
             </form>
         </div>    
-        <div class="footer-fixed">
-            <div class="footer">
-                <p>Copyright © 2015 Sota.Inami All rights reserved.</p>
-            </div>
-        </div>
-    </body>
-    
-</html>
+        

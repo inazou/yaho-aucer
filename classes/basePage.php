@@ -6,6 +6,8 @@ class basePage{
     // テンプレートのディレクトリを保存
     private $tempDir ="";
     
+    
+    
 
             
     public function __construct() {
@@ -90,6 +92,7 @@ class basePage{
      */
     public function escapeNullByte($arr) {
         if (is_array($arr) ){
+            $esc = array();
             foreach ($arr as $key => $value) {
                 $esc[str_replace("\0", "", $key)] = str_replace("\0", "", $value);
             }
@@ -97,5 +100,7 @@ class basePage{
         }
         return str_replace("\0", "", $arr);
     }
+    
+    
 
 }

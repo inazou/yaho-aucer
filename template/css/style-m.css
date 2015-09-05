@@ -1,0 +1,105 @@
+@charset "utf-8";
+
+/*コンテナー（HPを囲むブロック）
+---------------------------------------------------------------------------*/
+#container {
+	width: auto;
+}
+
+/*コンテンツ（main,subを囲むブロック）
+---------------------------------------------------------------------------*/
+#contents {
+	margin-right: 6px;
+	margin-left: 6px;
+}
+
+/*ヘッダー（サイトロゴが入ったブロック）
+---------------------------------------------------------------------------*/
+header {
+	position: static;
+	height: auto;
+}
+/*h1ロゴの設定*/
+header h1 {
+	position: static;
+	width: 100%;
+	padding: 30px 0px;
+	border-radius: 0;
+}
+
+/*mainコンテンツ
+---------------------------------------------------------------------------*/
+#main {
+	float: none;
+	width: auto;
+	padding-top: 150px;
+}
+
+/*subコンテンツ
+---------------------------------------------------------------------------*/
+#sub {
+	float: none;
+	width: auto;
+}
+
+/*左側のメインメニュー
+---------------------------------------------------------------------------*/
+nav#mainmenu ul {
+	position: absolute;
+	height: auto;
+	width: 100%;
+	left: 0px;
+	top: 130px;
+}
+/*各メニューの設定*/
+nav#mainmenu ul li {
+	float:left;
+	width: 50%;
+}
+nav#mainmenu ul li a {
+	width: auto;
+	margin-bottom: 0;
+	border: none;
+	border-radius: 0;
+	border-bottom: 1px solid #c9c9c9;
+}
+/*奇数番目のメニューの設定*/
+nav#mainmenu ul li:nth-child(odd) {
+	border-right: 1px solid #c9c9c9;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+/*マウスオン時の設定*/
+nav#mainmenu ul li a:hover {
+	border-bottom: 1px solid #c9c9c9;
+	border-top-style: none;
+	border-right-style: none;
+	border-left-style: none;
+}
+
+/*service2.html（サービス詳細ページ）
+---------------------------------------------------------------------------*/
+/*写真の設定*/
+#main img.wa {
+	width: 100%;
+	height: auto;
+}
+
+/*テーブル１
+---------------------------------------------------------------------------*/
+.ta1 {
+	width: 100%;
+}
+
+/*subコンテンツを表示させない為の設定
+---------------------------------------------------------------------------*/
+body.sdn #sub {
+	display: none;
+}
+body.sdn #main {
+	padding-top: 33px;
+}
+body.sdn {
+	background: none;
+}
