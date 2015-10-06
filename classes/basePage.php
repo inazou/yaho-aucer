@@ -6,6 +6,9 @@ class basePage{
     // テンプレートのディレクトリを保存
     private $tempDir ="";
     
+    // yahooApiId
+    protected $appid ="";
+    
     
     
 
@@ -19,13 +22,28 @@ class basePage{
      */
     private function init(){
         $this->setTempDir($this->userAgentCheck());
+        $this->includeId();
+        
     } 
 
-    
-
-
-
     /**
+     * apiid読み込み
+     * @access private
+     * @return boolean
+     */
+    private function includeId(){
+        $xml = topDir . '/xml/yahooApi.xml';
+        $data = json_decode(json_encode(simplexml_load_file($xml)),TRUE);
+        if(!isset($data['appid'])){
+            error_log('Fatal:MISSING INCLUDEID');
+            return FALSE;
+        }  else {
+            $this->appid = $data['appid'];
+        }
+        return TRUE;
+    } 
+
+        /**
      * ユーザーエージェントの判別
      * ガラケー return 2
      * スマホ return 1

@@ -4,7 +4,6 @@
 class baseConf extends basePage{
     
     
-    const appid = "dj0zaiZpPWRzTGF1cmQzamE4TSZzPWNvbnN1bWVyc2VjcmV0Jng9MzI-";
     
     const sendUrl = "http://auctions.yahooapis.jp/AuctionWebService/V2/search";
     
@@ -73,9 +72,7 @@ class baseConf extends basePage{
     private function checkGet(){
         $cnv = array();
         foreach ($_GET as $key => $value) {
-            
             $cnv[$key] = mb_convert_kana((mb_convert_encoding($value, "UTF-8", "auto" )), "aKV"); 
-            
         }
         unset($key, $value);
         //var_dump($cnv);
@@ -105,7 +102,7 @@ class baseConf extends basePage{
     private function send($param) {
         
         $ch = curl_init(self::sendUrl);
-        curl_setopt($ch, CURLOPT_USERAGENT, "Yahoo AppID: ". self::appid);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Yahoo AppID: ". $this->appid);
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($param));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
