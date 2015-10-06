@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="template/css/style.css">
         <link href="template/css/style-s.css" rel="stylesheet" type="text/css" media="only screen and (max-width:480px)">
         <link href="template/css/style-m.css" rel="stylesheet" type="text/css" media="only screen and (min-width:481px) and (max-width:800px)">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <style>
@@ -21,20 +22,36 @@ nav#mainmenu ul li a {
 }
 </style>
 <![endif]-->
-    <script language=javascript>
-                function show(inputData){
-                    var objID=document.getElementById( "layer_" + inputData );
-                    if(objID.className =='close') {
-                        objID.style.display='block';
-                        objID.className ='open';
-                    }else{
-                        objID.style.display='none';
-                        objID.className='close';
-                    }
+        <script language=javascript>
+            //詳細検索の表示非表示切り替え
+            function show(inputData){
+                var objID=document.getElementById( "layer_" + inputData );
+                if(objID.className =='close') {
+                    objID.style.display='block';
+                    objID.className ='open';
+                }else{
+                    objID.style.display='none';
+                    objID.className='close';
                 }
+            }
+            $(function(){
+                $('#mCategory').change(function(){
+                    //  親要素が変更した時の処理
+                    var opt = $("#mCategory option:selected").val();
+                    $.post(
+                        "./category.php" ,
+                        {
+                            val : opt
+                        } ,
+                        function(data , status){
+                            $("#sCategory").html(data);
+                        }
+                    );
+                });
+            });
+            
         </script> 
     </head>
-
 <body>
 
 <div id="container">
@@ -59,14 +76,14 @@ nav#mainmenu ul li a {
 
 </section>
     <ul class="pageNav01">
-<li><a href="1.html">&laquo; 前</a></li
-><li><a href="1.html">1</a></li
-><li><span style="color: black">2</span></li
-><li><a href="3.html">3</a></li
-><li><a href="4.html">4</a></li
-><li><a href="5.html">5</a></li
-><li><a href="6.html">6</a></li
-><li><a href="3.html">次 &raquo;</a></li>
+<li><a href="1.html">&laquo; 前</a></li>
+<li><a href="1.html">1</a></li>
+<li><span style="color: black">2</span></li>
+<li><a href="3.html">3</a></li>
+<li><a href="4.html">4</a></li>
+<li><a href="5.html">5</a></li>
+<li><a href="6.html">6</a></li>
+<li><a href="3.html">次 &raquo;</a></li>
 </ul>
 
 </div>
@@ -88,7 +105,7 @@ nav#mainmenu ul li a {
                         <p>
                             <label>
                                 
-                                カテゴリ: <select name = "category">
+                                カテゴリ: <select name = "category"id="mCategory">
                                         <option value="">
                                             選択してください
                                         </option>
@@ -96,6 +113,16 @@ nav#mainmenu ul li a {
                                             echo $category;
                                         
                                         ?>
+                                </select>
+                            </label>
+                        </p>
+                        <p>
+                            <label>
+                                
+                                サブカテゴリ: <select name = "category" id="sCategory">
+                                        <option value="">
+                                            カテゴリを選択してください
+                                        </option>
                                 </select>
                             </label>
                         </p>

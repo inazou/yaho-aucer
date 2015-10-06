@@ -21,6 +21,12 @@ class baseConf extends basePage{
     private $sort = "";
     
     /**
+     *出品地域のhtmlを格納
+     * @var string
+     */
+    private $locId = "";
+    
+    /**
      * メッセージを格納
      * @var string 
      */
@@ -39,11 +45,18 @@ class baseConf extends basePage{
      * @var string
      */
     private $resItem = "";
+    
+    /**
+     * メッセージ部分のページを表示
+     * @var string
+     */
+    private $msgPage = "";
 
     public function __construct() {
         parent::__construct();
         $this->createCategory();
         $this->createSort();
+        $this->createLocId();
         
         if(isset($_GET)){
             
@@ -79,7 +92,6 @@ class baseConf extends basePage{
         }
         $post['output'] = "xml";
         $res = $this->send($post);
-        var_dump($res);
         $this->createDisp($res);
         
 
@@ -96,7 +108,7 @@ class baseConf extends basePage{
         curl_setopt($ch, CURLOPT_USERAGENT, "Yahoo AppID: ". self::appid);
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($param));
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         
         $res = curl_exec($ch);
@@ -170,6 +182,69 @@ class baseConf extends basePage{
         return;
     }
     /**
+     * 詳細検索の出品地域を作成
+     * @access private
+     * @param  
+     */
+    private function createLocId(){
+        $loc = array('北海道',  
+            '青森県', 
+            '岩手県', 
+            '宮城県',
+            '秋田県',
+            '山形県',
+            '福島県',
+            '茨城県',
+            '栃木県',
+            '群馬県',
+            '埼玉県',
+            '千葉県',
+            '東京都',
+            '神奈川県',
+            '山梨県',
+            '長野県',
+            '新潟県',
+            '富山県',
+            '石川県',
+            '福井県',
+            '岐阜県',
+            '静岡県',
+            '愛知県',
+            '三重県',
+            '滋賀県',
+            '京都府',
+            '大阪府',
+            '兵庫県',
+            '奈良県',
+            '和歌山県',
+            '鳥取県',
+            '島根県',
+            '岡山県',
+            '広島県',
+            '山口県',
+            '徳島県',
+            '香川県',
+            '愛媛県',
+            '高知県',
+            '福岡県',
+            '佐賀県',
+            '長崎県',
+            '熊本県',
+            '大分県',
+            '宮崎県',
+            '鹿児島県',
+            '沖縄県',
+            '海外'
+            );
+        
+        foreach ($loc as $key => $value) {
+            $key ++;
+            $this->locId .= "<option value =\"{$key}\">{$value}</option>";
+        }
+        
+        return;
+    }
+    /**
      * 検索結果をスクレーピングしhtmlを作成
      * @access private
      * @param string
@@ -183,7 +258,7 @@ class baseConf extends basePage{
         $xpath = new DOMXPath($dom);
         $xpath->registerNamespace('x', 'urn:yahoo:jp:auc:search');
         $totalResultsAvailable = $xpath->evaluate('string(//x:ResultSet/@totalResultsAvailable)');
-        echo $totalResultsAvailable.'<br>';
+        error_log($totalResultsAvailable);
         if($totalResultsAvailable == 0){
             $this->msg = "検索結果: ". $totalResultsAvailable. "件";
             return;
@@ -191,23 +266,30 @@ class baseConf extends basePage{
             $this->msg = "検索結果: ". $totalResultsAvailable. "件";  
         }
         $totalResultsReturned = $xpath->evaluate('string(//x:ResultSet/@totalResultsReturned)');
-        echo $totalResultsReturned.'<br>';
+        //echo $totalResultsReturned.'<br>';
         $firstResultPosition = $xpath->evaluate('string(//x:ResultSet/@firstResultPosition)');
-        echo $firstResultPosition.'<br>';
+        //echo $firstResultPosition.'<br>';
+        // 現在のページの表示を作る
+        $this->msgPage .= $firstResultPosition. "/";
+        if(($totalResultsAvailable % 20) === 0){
+            $this->msgPage .= (int)($totalResultsAvailable / 20);
+        }  else {
+            $this->msgPage .= ((int)($totalResultsAvailable / 20) + 1);
+        }
         $itemcount = $xpath->query('//x:Result/x:Item')->length;
-        print_r($itemcount);
+        //print_r($itemcount);
         for($i = 1;$i <= $itemcount;$i++){
-            $reaarr[$i]['AuctionID'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:AuctionID)');
-            $reaarr[$i]['Title'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Title)');
-            $reaarr[$i]['Id'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Seller/x:Id)');
-            $reaarr[$i]['AuctionItemUrl'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:AuctionItemUrl)');
-            $reaarr[$i]['Image'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image)');
-            $reaarr[$i]['ImageWidth'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image/@width)');
-            $reaarr[$i]['ImageHeight'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image/@height)');
-            $reaarr[$i]['CurrentPrice'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:CurrentPrice)');
-            $reaarr[$i]['Bids'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Bids)');
-            $reaarr[$i]['EndTime'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:EndTime)');
-            $reaarr[$i]['BidOrBuy'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:BidOrBuy)');
+            $resarr[$i]['AuctionID'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:AuctionID)');
+            $resarr[$i]['Title'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Title)');
+            $resarr[$i]['Id'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Seller/x:Id)');
+            $resarr[$i]['AuctionItemUrl'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:AuctionItemUrl)');
+            $resarr[$i]['Image'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image)');
+            $resarr[$i]['ImageWidth'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image/@width)');
+            $resarr[$i]['ImageHeight'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Image/@height)');
+            $resarr[$i]['CurrentPrice'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:CurrentPrice)');
+            $resarr[$i]['Bids'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Bids)');
+            $resarr[$i]['EndTime'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:EndTime)');
+            $resarr[$i]['BidOrBuy'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:BidOrBuy)');
             $icon[$i]['FeaturedIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:FeaturedIcon)');
             $icon[$i]['NewIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:NewIcon)');
             $icon[$i]['StoreIcon'] = $xpath->evaluate('string(//x:Result/x:Item['. $i .']/x:Option/x:StoreIcon)');
@@ -223,8 +305,8 @@ class baseConf extends basePage{
             
             
         }
-        var_dump($reaarr);
-        $this->createItemHtml($reaarr, $icon);
+        //var_dump($reaarr);
+        $this->createItemHtml($resarr, $icon);
         return;
     }
     
@@ -235,7 +317,7 @@ class baseConf extends basePage{
      */
     private function createItemHtml($res, $icon){
         for($i = 1; $i <= count($res); $i++){
-            $this->resItem .= "<article><a href=\"". $res[$i]['AuctionItemUrl']. "\"><h1>". $res[$i]['Title']. " ";
+            $this->resItem .= "<article><a href=\"". $res[$i]['AuctionItemUrl']. "\"target=/”_blank/”><h1>". $res[$i]['Title']. " ";
             foreach ($icon[$i] as $key => $val){
                 if(!empty($icon[$i][$key])){
                     $this->resItem .= "<img src=\"". $val. "\" /> ";
@@ -296,6 +378,14 @@ class baseConf extends basePage{
         return $this->sort;
     }
     /**
+     * 出品地域のhtmlを取得
+     * @access public
+     * @return type
+     */
+    public function getLocId(){
+        return $this->locId;
+    }
+    /**
      * 表示用の検索結果を取得
      * @access public
      * @return type
@@ -311,13 +401,21 @@ class baseConf extends basePage{
     public function getResItem(){
         return $this->resItem;
     }
-     /**
-     * 表示用の検索結果のアイテムを取得
+    /**
+     * 表示用の検索結果の全件数を取得
      * @access public
      * @return type
      */
     public function getMsg(){
         return $this->msg;
+    }
+    /**
+     * 表示用の検索結果のページを取得
+     * @access public
+     * @return type
+     */
+    public function getMsgPage(){
+        return $this->msgPage;
     }
     
 }

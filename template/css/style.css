@@ -154,7 +154,6 @@ nav#mainmenu form#search div#searchBox input#textBox{
 
 nav#mainmenu form#search div#searchBox input#btn{
     width: 50px; /* ボタンの幅 */
-    height: 2em; /* ボタンの高さ */
     padding: 0;
 
 }
@@ -180,7 +179,7 @@ nav#mainmenu ul li  a{
 /*マウスオン時の設定*/
 nav#mainmenu ul li a:hover {
 	background: #f7f4cc ;	/*背景色、背景画像の読み込み、リピートしない、左から12px、上下中央に配置。*/
-	border: 1px solid #818181;	/*枠線の幅、線種、色*/
+	/*border: 1px solid #818181;*/	/*枠線の幅、線種、色*/
 }
 
 /*フッター設定
@@ -379,4 +378,45 @@ figcaption {
 .mini1 {
 	font-size: 12px;
 	line-height: 1.6;
+}
+/*ページャーの設定*/
+#main ul.pageNav01 {
+	margin: 0 0 10px;
+	padding: 10px 10px 5px;
+	background: #eee;
+	text-align: center;
+        border-radius: 6px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+}
+
+#main ul.pageNav01 li {
+	display: inline;
+	margin: 0 2px;
+	padding: 0;
+        
+}
+
+#main ul.pageNav01 li span,
+#main ul.pageNav01 li a {
+	display: inline-block;
+	margin-bottom: 5px;
+	padding: 1px 8px;
+	background: #fff;
+	border: 1px solid #aaa;
+	text-decoration: none;
+	vertical-align: middle;
+        -webkit-transition: 0.5s;	/*マウスオン時の移り変わるまでの時間設定。0.5秒。*/
+	transition: 0.5s;			/*マウスオン時の移り変わるまでの時間設定。0.5秒。*/
+        border-radius: 6px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+}
+
+#main ul.pageNav01 li a:hover {
+	background-color: #f7f4cc;
 }
