@@ -2,11 +2,9 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <title>Yaho!-aucer 検索結果</title>
+        <title>Yaho!-auce</title>
         <meta name="viewport" content="width=device-width">
         <meta name="copyright" content="Template Party">
-        <meta name="description" content="ここにサイト説明を入れます">
-        <meta name="keywords" content="キーワード１,キーワード２,キーワード３,キーワード４,キーワード５">
         <link rel="stylesheet" href="template/css/style.css">
         <link href="template/css/style-s.css" rel="stylesheet" type="text/css" media="only screen and (max-width:480px)">
         <link href="template/css/style-m.css" rel="stylesheet" type="text/css" media="only screen and (min-width:481px) and (max-width:800px)">
@@ -58,7 +56,7 @@ nav#mainmenu ul li a {
 
 <header>
     <h1>
-        <img src="template/images/yaho-aucer.png" width="150" height="50" alt=""><br>ヤフオク！検索統計サイト
+        <img src="template/images/yaho-aucer.png" width="150" height="50" alt=""><br>ヤフオク！出品者向け検索サイト
     </h1>
     
 </header>
@@ -92,7 +90,7 @@ nav#mainmenu ul li a {
 <div id="sub">
 
 <nav id="mainmenu">
-    <form method="get" action="conf.php" id="search">
+    <form method="get" action="./conf" id="search">
         <div id="searchBox">
             <input type="text" name="query" id="textBox" placeholder="キーワードから探す"><input type="submit" value="検索" id="btn">
         </div>
