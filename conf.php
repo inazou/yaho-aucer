@@ -12,4 +12,5 @@ $result = $baseConf->getResult();
 $resItem = $baseConf->getResItem();
 $msg = $baseConf->getMsg();
 $msgPage = $baseConf->getMsgPage();
+$pager = $baseConf->getPager();
 include_once 'template/conf.tpl';

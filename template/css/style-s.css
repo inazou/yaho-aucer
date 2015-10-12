@@ -155,3 +155,20 @@ body.sdn #main {
 body.sdn {
 	background: none;
 }
+
+
+#menubar_hdr {
+	display: none;
+}
+#menubar_hdr {
+	display: inline;
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#e5e5e5));
+	background-image: -webkit-linear-gradient(#fbfbfb, #e5e5e5);
+	background-image: linear-gradient(#fbfbfb, #e5e5e5);
+	padding: 10px;
+	border: 1px solid #cfcfcf;
+	border-radius: 0px 0px 6px 6px;
+}

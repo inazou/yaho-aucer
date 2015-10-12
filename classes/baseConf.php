@@ -50,20 +50,37 @@ class baseConf extends basePage{
      * @var string
      */
     private $msgPage = "";
-
+    /**
+     * GETで取得したデータ
+     * @var array
+     */
+    private $data = array();
+    
+    /**
+     * 検索結果のページ数
+     * @var int
+     */
+    private $maxPage = 0;
+    
+    /**
+     * ページャーhtml
+     * @var string
+     */
+    private $pager = "";
+    
     public function __construct() {
         parent::__construct();
+        if(isset($_GET)){
+            $this->checkGet(); 
+            $this->pager = $this->createPage();
+        } else {
+            $this->result = "ヤフーオークションからの検索結果を表示します。";
+        }
         $this->createCategory();
         $this->createSort();
         $this->createLocId();
         
-        if(isset($_GET)){
-            
-            $this->checkGet(); 
-            
-        } else {
-            $this->result = "ヤフーオークションからの検索結果を表示します。";
-        }
+        
             
         
     }
@@ -85,8 +102,9 @@ class baseConf extends basePage{
             $this->result = "検索する文字列を入力してください。";
             return;
         } else {
-            $this->result = '検索ワード:"'. $post['query']. '"';
+            $this->result = '検索ワード:"'. htmlspecialchars($post['query'], ENT_QUOTES, 'UTF-8') . '"';
         }
+        $this->data = $post;
         $post['output'] = "xml";
         $res = $this->send($post);
         $this->createDisp($res);
@@ -256,22 +274,19 @@ class baseConf extends basePage{
         $xpath->registerNamespace('x', 'urn:yahoo:jp:auc:search');
         $totalResultsAvailable = $xpath->evaluate('string(//x:ResultSet/@totalResultsAvailable)');
         error_log($totalResultsAvailable);
+        $this->msg = "検索結果: ". number_format($totalResultsAvailable). "件";
         if($totalResultsAvailable == 0){
-            $this->msg = "検索結果: ". $totalResultsAvailable. "件";
             return;
-        } else {
-            $this->msg = "検索結果: ". $totalResultsAvailable. "件";  
         }
         $totalResultsReturned = $xpath->evaluate('string(//x:ResultSet/@totalResultsReturned)');
         //echo $totalResultsReturned.'<br>';
         $firstResultPosition = $xpath->evaluate('string(//x:ResultSet/@firstResultPosition)');
         //echo $firstResultPosition.'<br>';
-        // 現在のページの表示を作る
-        $this->msgPage .= $firstResultPosition. "/";
+        //ページの最大数を計算
         if(($totalResultsAvailable % 20) === 0){
-            $this->msgPage .= (int)($totalResultsAvailable / 20);
-        }  else {
-            $this->msgPage .= ((int)($totalResultsAvailable / 20) + 1);
+            $this->maxPage = (int)($totalResultsAvailable / 20);
+        } else {
+            $this->maxPage = ((int)($totalResultsAvailable / 20) + 1);
         }
         $itemcount = $xpath->query('//x:Result/x:Item')->length;
         //print_r($itemcount);
@@ -320,11 +335,11 @@ class baseConf extends basePage{
                     $this->resItem .= "<img src=\"". $val. "\" /> ";
                 }
             }
-            $this->resItem .= "</h1><figure><div><img src=\"". $res[$i]['Image']. "\" width=\"". $res[$i]['ImageWidth']. "\" height=\"". $res[$i]['ImageHeight']. "\" alt=\"\" /></div></figure><p>出品者: ". $res[$i]['Id']. "</p><p>現在価格: ". floor($res[$i]['CurrentPrice']). "円</p>";//<p>入札件数: xx</p><p>残り時間: x日</p>;
+            $this->resItem .= "</h1><figure><div><img src=\"". $res[$i]['Image']. "\" width=\"". $res[$i]['ImageWidth']. "\" height=\"". $res[$i]['ImageHeight']. "\" alt=\"\" /></div></figure><div class=\"leftItem\"><p>出品者: ". $res[$i]['Id']. "</p><p>現在価格: ". number_format(floor($res[$i]['CurrentPrice'])). "円</p>";//<p>入札件数: xx</p><p>残り時間: x日</p>;
             if(!empty($res[$i]['BidOrBuy'])){
-                $this->resItem .= "<p>即決価格: ". floor($res[$i]['BidOrBuy']). "円</p>";
+                $this->resItem .= "<p>即決価格: ". number_format(floor($res[$i]['BidOrBuy'])). "円</p>";
             }
-            $this->resItem .= "<p>入札件数: ". $res[$i]['Bids']. "</p><p>残り時間: ". $this->createTime($res[$i]['EndTime']). "</p>";
+            $this->resItem .= "</div><div class=\"rightItem\"><p>入札件数: ". $res[$i]['Bids']. "</p><p>残り時間: ". $this->createTime($res[$i]['EndTime']). "</p></div>";
             
             $this->resItem .= "</a></article>";
         }
@@ -356,7 +371,99 @@ class baseConf extends basePage{
         $date .= floor($h). "時間". floor($m). "分";
         return $date;
     }
+    
+    /**
+     * ページャーhtml作成
+     * @access private
+     * @return string ページャーhtml
+     */
+    private function createPage() {
+        if(empty($this->data)){
+            return ;
+        }
+        $url = "./conf.php?";
+        foreach($this->data as $key => $val){
+            if($key != "page"){
+                $url .= $key . "=" . $val . "&";
+            }
+        }
+        $url .= "page=";
+        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+        $pager = <<<EOF
+                <ul class="pageNav01">
+EOF;
+        if(empty($this->data["page"])){
+            $this->data["page"] = 1;
+        }
+        // 現在のページの表示を作る
+        if($this->maxPage != 0){
+            $this->msgPage .= $this->data["page"]. "/";
+            $this->msgPage .= $this->maxPage . "ページ";
+        }
+        if($this->data["page"] == 1){
+            //1ページ目の時
+            $pager .= <<<EOF
+                    <li><a style="display:none">&laquo; 前</a></li>
+                    <li><span style="color: black">1</span></li>
+EOF;
+            for($i = 2; $i <= 5 && $i <= $this->maxPage; $i++){
+                $pager .= <<<EOF
+                        <li><a href="{$url}{$i}">{$i}</a></li>
+EOF;
+            }
+        } else {
+            $page = $this->data["page"] - 1;
+            $pager .= <<<EOF
+                    <li><a href="{$url}{$page}">&laquo; 前</a></li>
+EOF;
+            if($this->data["page"] == 2){
+                //2ページ目の時
+                $pager .= $this->commonCreatePager($url, $page, 0, 5);
+            } elseif($this->data["page"] == $this->maxPage) {
+                //最終ページの時
+                $pager .= $this->commonCreatePager($url, $page, 3, 4);
+            } elseif($this->data["page"] == $this->maxPage - 1) {
+                //最終ページの１ページ前の時
+                $pager .= $this->commonCreatePager($url, $page, 2, 4);
+            } else {
+                //その他のページの時
+                $pager .= $this->commonCreatePager($url, $page, 1, 4);
+            }
             
+        }
+        if($this->data["page"] < $this->maxPage){
+            $page = $this->data["page"] + 1;
+            $pager .= <<<EOF
+                    <li><a href="{$url}{$page}">次 &raquo;</a></li>
+EOF;
+        }
+        $pager .= <<<EOF
+                </ul>
+EOF;
+        return $pager;
+    }
+    
+    /**
+     * ページャーhtml作成共通部分
+     * @access private
+     * @param int $url $page $ini $count
+     * @return string ページャーhtml
+     */
+    private function commonCreatePager($url, $page, $ini, $count){
+        $pager ="";
+        for($i = $page - $ini; $i < $page + $count && $i <= $this->maxPage; $i++){
+            if($i == $this->data["page"]){
+                $pager .= <<<EOF
+                        <li><span style="color: black">{$i}</span></li>
+EOF;
+            } else {
+                $pager .= <<<EOF
+                        <li><a href="{$url}{$i}">{$i}</a></li>
+EOF;
+            }
+        }
+        return $pager;
+    }
 
     /**
      * カテゴリのhtmlを取得
@@ -366,6 +473,7 @@ class baseConf extends basePage{
     public function getCategory(){
         return $this->category;
     }
+    
     /**
      * ソートのhtmlを取得
      * @access public
@@ -374,6 +482,7 @@ class baseConf extends basePage{
     public function getSort(){
         return $this->sort;
     }
+    
     /**
      * 出品地域のhtmlを取得
      * @access public
@@ -382,6 +491,7 @@ class baseConf extends basePage{
     public function getLocId(){
         return $this->locId;
     }
+    
     /**
      * 表示用の検索結果を取得
      * @access public
@@ -389,6 +499,7 @@ class baseConf extends basePage{
      */
     public function getResult(){
         return $this->result;
+        
     }
     /**
      * 表示用の検索結果のアイテムを取得
@@ -398,6 +509,7 @@ class baseConf extends basePage{
     public function getResItem(){
         return $this->resItem;
     }
+    
     /**
      * 表示用の検索結果の全件数を取得
      * @access public
@@ -406,6 +518,7 @@ class baseConf extends basePage{
     public function getMsg(){
         return $this->msg;
     }
+    
     /**
      * 表示用の検索結果のページを取得
      * @access public
@@ -413,6 +526,15 @@ class baseConf extends basePage{
      */
     public function getMsgPage(){
         return $this->msgPage;
+    }
+    
+    /**
+     * 表示用の検索結果のページを取得
+     * @access public
+     * @return type
+     */
+    public function getPager(){
+        return $this->pager;
     }
     
 }

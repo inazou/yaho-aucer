@@ -95,6 +95,17 @@ header h1 {
 	color: #FFF;		/*文字色*/
 	padding: 3px 0px 3px 40px;	/*余白。左から、上、右、下、左への指定。*/
 }
+/*mainコンテンツのh1タグの左側メッセージの設定*/
+#main h1 div.msg {
+        width: 50%;
+        float: left;
+}
+/*mainコンテンツのh1タグの右側メッセージの設定*/
+#main h1 div.msgPage {
+        text-align: right;
+        width: 50%;
+        float: right;
+}
 /*mainコンテンツの段落タグ設定*/
 #main p {
 	padding: 0.5em 10px 1em;	/*左から、上、左右、下への余白*/
@@ -214,12 +225,22 @@ footer a {
 /*ボックス内の段落タグ設定*/
 #main section.list article p {
 	padding: 0px;
-	margin-left: 220px;	/*左の写真とのバランスをとって設定*/
+}
+/*ボックス内の文字左側設定*/
+#main section.list article div.leftItem {
+	padding: 0px;
+        float: left;
+        width: 30%;
+}
+/*ボックス内の文字右側設定*/
+#main section.list article div.rightItem {
+	padding: 0px;
+        float: left;
+        padding: 0px 30px;
 }
 /*ボックス内の写真*/
 #main section.list article figure div{
     width: 220px;
-    height: 150px;
     float: left; /*画像を左へ回り込み*/
 }
 /*ボックス内の写真設定*/
@@ -340,6 +361,10 @@ footer a {
 
 /*その他
 ---------------------------------------------------------------------------*/
+#menubar_hdr {
+	display: none;
+}
+
 .look {
 	background: #e8e8e8;
 	color: #818181;
@@ -420,3 +445,5 @@ figcaption {
 #main ul.pageNav01 li a:hover {
 	background-color: #f7f4cc;
 }
+
+

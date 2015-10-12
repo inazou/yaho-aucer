@@ -2,10 +2,10 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <title>Yaho!-auce</title>
+        <title>Yaho!-aucer</title>
         <meta name="viewport" content="width=device-width">
         <meta name="copyright" content="Template Party">
-        <link rel="stylesheet" href="template/css/style.css">
+        <link rel="stylesheet" href="template/css/style.css" type="text/css">
         <link href="template/css/style-s.css" rel="stylesheet" type="text/css" media="only screen and (max-width:480px)">
         <link href="template/css/style-m.css" rel="stylesheet" type="text/css" media="only screen and (min-width:481px) and (max-width:800px)">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
@@ -20,7 +20,9 @@ nav#mainmenu ul li a {
 }
 </style>
 <![endif]-->
-        <script language=javascript>
+        <script type="text/javascript" src="template/js/openclose.js"></script>
+        <script type="text/javascript">
+            
             //詳細検索の表示非表示切り替え
             function show(inputData){
                 var objID=document.getElementById( "layer_" + inputData );
@@ -46,6 +48,9 @@ nav#mainmenu ul li a {
                         }
                     );
                 });
+                if (OCwindowWidth() < 480) {
+                    open_close("menubar_hdr", "mainmenu");
+                }
             });
             
         </script> 
@@ -67,22 +72,13 @@ nav#mainmenu ul li a {
 
 <section class="list">
 
-<h1><?php echo $msg; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $msgPage; ?></h1>
+    <h1><div class="msg"><?php echo $msg; ?></div><div class="msgPage"><?php echo $msgPage; ?>&nbsp;</div><br clear="all"></h1>
 <p><?php echo $result; ?></p>
 
 <?php echo $resItem; ?>
 
 </section>
-    <ul class="pageNav01">
-<li><a href="1.html">&laquo; 前</a></li>
-<li><a href="1.html">1</a></li>
-<li><span style="color: black">2</span></li>
-<li><a href="3.html">3</a></li>
-<li><a href="4.html">4</a></li>
-<li><a href="5.html">5</a></li>
-<li><a href="6.html">6</a></li>
-<li><a href="3.html">次 &raquo;</a></li>
-</ul>
+<?php if(isset($pager)) echo $pager; ?>
 
 </div>
 <!--/main-->
@@ -90,7 +86,7 @@ nav#mainmenu ul li a {
 <div id="sub">
 
 <nav id="mainmenu">
-    <form method="get" action="./conf" id="search">
+    <form method="get" action="./conf.php" id="search">
         <div id="searchBox">
             <input type="text" name="query" id="textBox" placeholder="キーワードから探す"><input type="submit" value="検索" id="btn">
         </div>
@@ -189,6 +185,8 @@ nav#mainmenu ul li a {
 <!--/sub-->
 
 <p id="pagetop"><a href="#">↑ PAGE TOP</a></p>
+<!--スマホ用メニューバー-->
+<img src="template/images/icon_bar.png" width="20" height="16" alt="" id="menubar_hdr" class="close">
 
 </div>
 <!--/contents-->
@@ -200,6 +198,9 @@ nav#mainmenu ul li a {
 
 </div>
 <!--/container-->
+
+
+
 
 </body>
 </html>
