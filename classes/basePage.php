@@ -35,7 +35,7 @@ class basePage{
         $xml = topDir . '/xml/yahooApi.xml';
         $data = json_decode(json_encode(simplexml_load_file($xml)),TRUE);
         if(!isset($data['appid'])){
-            error_log('Fatal:MISSING INCLUDEID');
+            error_log('MISSING INCLUDEID APPID');
             return FALSE;
         }  else {
             $this->appid = $data['appid'];

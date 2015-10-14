@@ -164,8 +164,11 @@ nav#mainmenu form#search div#searchBox input#textBox{
 }
 
 nav#mainmenu form#search div#searchBox input#btn{
-    width: 50px; /* ボタンの幅 */
-    padding: 0;
+        width: 50px; /* ボタンの幅 */
+        height: 25px;
+        padding: 0;
+        -webkit-appearance: button;
+    
 
 }
 
@@ -186,6 +189,9 @@ nav#mainmenu ul li  a{
 	transition: 0.5s;			/*同上*/
 	margin-bottom: 1em;			/*メニュー間のスペース*/
 	padding: 5px 17.5px 5px 17.5px;	/*左から、上、右、下、左への余白*/
+}
+nav#mainmenu ul li  a{
+        width: auto;
 }
 /*マウスオン時の設定*/
 nav#mainmenu ul li a:hover {
@@ -446,4 +452,277 @@ figcaption {
 	background-color: #f7f4cc;
 }
 
+/*ここからタブレット用（481px～800px）環境の設定
+---------------------------------------------------------------------------*/
+/*表示を切り替えるウィンドウサイズの指定*/
+@media (min-width:481px) and (max-width:800px){
 
+/*コンテナー（HPを囲むブロック）
+---------------------------------------------------------------------------*/
+#container {
+	width: auto;
+}
+
+/*ヘッダー（サイトロゴが入ったブロック）
+---------------------------------------------------------------------------*/
+header {
+	position: static;
+	height: auto;
+}
+/*h1ロゴの設定*/
+header h1 {
+	position: static;
+	width: 100%;
+	padding: 30px 0px;
+	border-radius: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+/*コンテンツ（main,subを囲むブロック）
+---------------------------------------------------------------------------*/
+#contents {
+	margin-right: 6px;
+	margin-left: 6px;
+	padding-top: 30px;
+}
+
+/*mainコンテンツ
+---------------------------------------------------------------------------*/
+#main {
+	float: none;
+	width: auto;
+}
+
+/*subコンテンツ
+---------------------------------------------------------------------------*/
+#sub {
+	float: none;
+	width: auto;
+}
+
+/*メインメニュー（タブレット・スマホ環境でのみ表示される）
+---------------------------------------------------------------------------*/
+/*各メニューの設定*/
+nav#menubar ul li {
+	float:left;
+	width: 50%;
+}
+nav#menubar ul li a {
+	width: auto;
+	text-decoration: none;
+	display: block;
+	background: rgba(255,255,255,0.7) url(../images/arrow1.png) no-repeat 10px center;/*左のカンマ区切りの4つの数値は、左3つはRGBカラーでの色指定で4つめは透明度(0.7＝70％)。背景画像の読み込み、リピートしない、左から10px、上下中央に配置。*/
+	border-bottom: 1px solid #c9c9c9;
+	padding: 5px 0px 5px 35px;	/*左から、上、右、下、左への余白*/
+}
+/*奇数番目のメニューの設定*/
+nav#menubar ul li:nth-child(odd) {
+	border-right: 1px solid #c9c9c9;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+/*マウスオン時の設定*/
+nav#menubar ul li a:hover {
+	background: #f7f4cc url(../images/arrow1.png) no-repeat 12px center;	/*背景色、背景画像の読み込み、リピートしない、左から12px、上下中央に配置。*/
+}
+
+/*テーブル１
+---------------------------------------------------------------------------*/
+.ta1 {
+	width: 100%;
+}
+
+/*その他
+---------------------------------------------------------------------------*/
+/*<body class="s-n">指定の場合にsubブロックを表示させない設定*/
+body.s-n #sub {
+	display: none;
+}
+.pn {
+	display: block;	/*PC環境で表示させない設定を表示させる*/
+}
+/*スマホとタブレットで表示させない設定*/
+.stn {
+	display: none;
+}
+
+}
+
+
+
+/*ここからスマートフォン用（480px以下）環境の設定
+---------------------------------------------------------------------------*/
+/*表示を切り替えるウィンドウサイズの指定*/
+@media (max-width : 480px){
+
+/*コンテナー（HPを囲むブロック）
+---------------------------------------------------------------------------*/
+#container {
+	width: auto;
+}
+
+/*ヘッダー（サイトロゴが入ったブロック）
+---------------------------------------------------------------------------*/
+header {
+	position: static;
+	height: auto;
+}
+/*h1ロゴの設定*/
+header h1 {
+	position: static;
+	width: 100%;
+	padding: 10px 0px;
+	border-radius: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+/*コンテンツ（main,subを囲むブロック）
+---------------------------------------------------------------------------*/
+#contents {
+	margin-right: 6px;
+	margin-left: 6px;
+	padding-top: 30px;
+}
+
+/*mainコンテンツ
+---------------------------------------------------------------------------*/
+#main {
+	float: none;
+	width: auto;
+}
+/*mainコンテンツのh2タグの設定*/
+#main h2 {
+	background: none, #f3a216 url(../images/bg1.png);
+	padding: 0px 0px 0px 10px;
+}
+
+/*subコンテンツ
+---------------------------------------------------------------------------*/
+#sub {
+	float: none;
+	width: auto;
+}
+
+/*メインメニュー（タブレット・スマホ環境でのみ表示される）
+---------------------------------------------------------------------------*/
+/*各メニューの設定*/
+nav#menubar ul li {
+	float:left;
+	width: 50%;
+}
+nav#menubar ul li a {
+	width: auto;
+	text-decoration: none;
+	display: block;
+	background: rgba(255,255,255,0.7) url(../images/arrow1.png) no-repeat 10px center;/*左のカンマ区切りの4つの数値は、左3つはRGBカラーでの色指定で4つめは透明度(0.7＝70％)。背景画像の読み込み、リピートしない、左から10px、上下中央に配置。*/
+	border-bottom: 1px solid #c9c9c9;
+	padding: 5px 0px 5px 35px;	/*左から、上、右、下、左への余白*/
+}
+/*奇数番目のメニューの設定*/
+nav#menubar ul li:nth-child(odd) {
+	border-right: 1px solid #c9c9c9;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+nav#mainmenu ul li  a{
+        width: auto;
+}
+/*マウスオン時の設定*/
+nav#menubar ul li a:hover {
+	background: #f7f4cc url(../images/arrow1.png) no-repeat 12px center;	/*背景色、背景画像の読み込み、リピートしない、左から12px、上下中央に配置。*/
+}
+
+/*service.html内の一覧の各ブロック
+---------------------------------------------------------------------------*/
+/*ボックス内の段落タグ設定*/
+#main section.list p {
+	margin-left: 0;
+}
+/*ボックス内の写真設定*/
+#main section.list figure img {
+	float: none;
+	width: 100%;
+	height: auto;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+/*トップページ内「更新情報・お知らせ」ブロック
+---------------------------------------------------------------------------*/
+section#new h2.open {
+	background: url(../images/btn_minus.png) no-repeat right center, #f3a216 url(../images/bg1.png);
+}
+section#new h2.close {
+	background: url(../images/btn_plus.png) no-repeat right center, #f3a216 url(../images/bg1.png);
+}
+/*ブロック全体の設定*/
+#new dl {
+	height: auto;
+	padding-left: 0;
+	margin-bottom: 1em;
+}
+/*日付設定*/
+#new dt {
+	float: none;
+	width: auto;
+}
+/*記事設定*/
+#new dd {
+	padding-left: 0;
+}
+
+/*テーブル１
+---------------------------------------------------------------------------*/
+.ta1 {
+	width: 100%;
+}
+/*テーブル内の右側*/
+.ta1 td{
+	width: auto;
+	padding: 2px;
+}
+/*テーブル内の左側の見出し部分*/
+.ta1 th{
+	width: 100px;
+	padding: 2px;
+}
+
+/*その他
+---------------------------------------------------------------------------*/
+/*<body class="s-n">指定の場合にsubブロックを表示させない設定*/
+body.s-n #sub {
+	display: none;
+}
+/*メニュー折りたたみ設定*/
+#menubar_hdr {
+	display: none;
+}
+#menubar_hdr {
+	display: inline;
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#e5e5e5));
+	background-image: -webkit-linear-gradient(#fbfbfb, #e5e5e5);
+	background-image: linear-gradient(#fbfbfb, #e5e5e5);
+	padding: 10px;
+	border: 1px solid #cfcfcf;
+	border-radius: 0px 0px 6px 6px;
+}
+.pn {
+	display: block;	/*PC環境で表示させない設定を表示させる*/
+}
+/*スマホとタブレットで表示させない設定*/
+.stn {
+	display: none;
+}
+
+}

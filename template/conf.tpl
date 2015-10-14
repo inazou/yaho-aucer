@@ -6,8 +6,6 @@
         <meta name="viewport" content="width=device-width">
         <meta name="copyright" content="Template Party">
         <link rel="stylesheet" href="template/css/style.css" type="text/css">
-        <link href="template/css/style-s.css" rel="stylesheet" type="text/css" media="only screen and (max-width:480px)">
-        <link href="template/css/style-m.css" rel="stylesheet" type="text/css" media="only screen and (min-width:481px) and (max-width:800px)">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +18,6 @@ nav#mainmenu ul li a {
 }
 </style>
 <![endif]-->
-        <script type="text/javascript" src="template/js/openclose.js"></script>
         <script type="text/javascript">
             
             //詳細検索の表示非表示切り替え
@@ -48,9 +45,6 @@ nav#mainmenu ul li a {
                         }
                     );
                 });
-                if (OCwindowWidth() < 480) {
-                    open_close("menubar_hdr", "mainmenu");
-                }
             });
             
         </script> 
@@ -86,7 +80,7 @@ nav#mainmenu ul li a {
 <div id="sub">
 
 <nav id="mainmenu">
-    <form method="get" action="./conf.php" id="search">
+    <form method="get" action="./conf" id="search">
         <div id="searchBox">
             <input type="text" name="query" id="textBox" placeholder="キーワードから探す"><input type="submit" value="検索" id="btn">
         </div>
@@ -185,8 +179,7 @@ nav#mainmenu ul li a {
 <!--/sub-->
 
 <p id="pagetop"><a href="#">↑ PAGE TOP</a></p>
-<!--スマホ用メニューバー-->
-<img src="template/images/icon_bar.png" width="20" height="16" alt="" id="menubar_hdr" class="close">
+
 
 </div>
 <!--/contents-->
