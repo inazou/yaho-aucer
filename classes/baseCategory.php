@@ -16,7 +16,7 @@ class baseCategory extends basePage{
         $referer = $_SERVER["HTTP_REFERER"];
         $url = parse_url($referer);
         $host = $url["host"];
-        if($host == "http://yahoaucer.jpn.ph"){
+        if($host == "yahoaucer.jpn.ph"){
             $this->getCategory();
            //postチェック
             error_log($_POST['val']);
