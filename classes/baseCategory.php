@@ -13,7 +13,10 @@ class baseCategory extends basePage{
     public function __construct() {
         parent::__construct();
         //リファラーチェック
-        if($_SERVER["REMOTE_ADDR"] == '::1'){
+        $referer = $_SERVER["HTTP_REFERER"];
+        $url = parse_url($referer);
+        $host = $url["host"];
+        if($host == "http://yahoaucer.jpn.ph"){
             $this->getCategory();
            //postチェック
             error_log($_POST['val']);
