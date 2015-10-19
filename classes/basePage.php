@@ -119,6 +119,24 @@ class basePage{
         return str_replace("\0", "", $arr);
     }
     
+    /**
+     * curlでpost
+     * @access protected
+     * @param array $param
+     * @return mixed
+     */
+    protected function send($param, $url) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Yahoo AppID: ". $this->appid);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($param));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        $res = curl_exec($ch);
+        curl_close($ch);
+        return $res;
+    }
+    
     
 
 }

@@ -40,7 +40,7 @@ class databaseConfig {
    /**
     * do query without placeholder
     * @access private
-    * @return bool
+    * @return mixed
     */
    private function query($query){
        $stmt = $this->pdo->query($query);
@@ -58,6 +58,34 @@ class databaseConfig {
    }
    
    /**
+    * do query with placeholder
+    * @access private
+    * @param string $query, $type array $param
+    * @return mixed
+    */
+   private function plQuery($query, $param, $type){
+       $stmt = $this->pdo->prepare($query);
+       if(count($param) != strlen($type)){
+            error_log("QUERY ERROR PARAM:" . print_r($param, TRUE));
+            return FALSE;
+       }
+       for($i = 0; $i < count($param); $i++){
+           if(substr($type, $i, 1) == "i"){
+               $val = (int)$param[$i];
+               $pdo = PDO::PARAM_INT;
+            }elseif(substr($type, $i, 1) == "s") {
+                $val = (string)$param[$i];
+               $pdo = PDO::PARAM_STR;
+            } else{
+                error_log("QUERY ERROR TYPE:" . $type);
+                return FALSE;
+            }
+           $stmt->bindParam($i + 1, $val, $pdo);
+       }
+       $stmt->execute();
+   }
+   
+   /**
     * disconnect database
     * @access private
     */
@@ -72,6 +100,9 @@ class databaseConfig {
         $stmt->bindParam(2, $name);
         $stmt->execute();
     }
+    
+    
+    
     public function getPrefecturesAll(){
         $this->con();
         $query = "SELECT * FROM prefectures";
