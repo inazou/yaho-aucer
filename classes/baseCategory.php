@@ -29,7 +29,7 @@ class baseCategory extends basePage{
     
     private function getCategory(){
         $param = array("output" => "xml");
-        $res = parent::send($param, self::sendUrl);
+        $res = $this->send($param, self::sendUrl);
         error_log($res);
     }
     

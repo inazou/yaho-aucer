@@ -114,7 +114,7 @@ class baseConf extends basePage{
         }
         $this->data = $post;
         $post['output'] = "xml";
-        $res = parent::send($post, self::sendUrl);
+        $res = $this->send($post, self::sendUrl);
         if($res == FALSE){
             $this->result = "検索結果の取得に失敗しました。時間をおいて再度検索してください。";
             return FALSE;
@@ -123,23 +123,7 @@ class baseConf extends basePage{
         
 
     }
-    /**
-     * curlでpost
-     * @access private
-     * @param array $param
-     * @return mixed
-     */
-    private function send($param, $url) {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_USERAGENT, "Yahoo AppID: ". $this->appid);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($param));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        $res = curl_exec($ch);
-        curl_close($ch);
-        return $res;
-    }
+    
     /**
      * 詳細検索のカテゴリを作成
      * @access private
