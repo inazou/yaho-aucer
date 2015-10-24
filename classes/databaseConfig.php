@@ -97,8 +97,10 @@ class databaseConfig {
     public function insertCategory($param){
         $this->con();
         $query = "INSERT INTO `category` (`id`, `name`, `parentId`) VALUES (?, ?, ?)";
-        $type = "isi";
-        $this->plQuery($query, $param, $type);
+        $stmt->bindParam(1, $param[0]);
+        $stmt->bindParam(2, $param[1]);
+        $stmt->bindParam(2, $param[2]);
+        $stmt->execute();
     }
     
     
