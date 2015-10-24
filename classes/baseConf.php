@@ -71,7 +71,7 @@ class baseConf extends basePage{
     
     /**
      * データベース
-     * @var Object
+     * @var databaseConfig
      */
     private $db;
     
@@ -79,8 +79,18 @@ class baseConf extends basePage{
         parent::__construct();
         $this->db = new databaseConfig();
         if(isset($_GET)){
-            $this->checkGet(); 
-            $this->pager = $this->createPage();
+            $data = $this->checkGet($_GET);
+            if($data !== FALSE){
+                $res = $this->send($data, self::sendUrl);
+                if($res !== FALSE){
+                    $this->createDisp($res);
+                    $this->pager = $this->createPage();
+                }else{
+                    $this->result = "検索結果の取得に失敗しました。時間をおいて再度検索してください。";
+                }
+            } else {
+                error_log("CHECK GET ERROR:" . print_r($_GET, TRUE));
+            }
         } else {
             $this->result = "ヤフーオークションからの検索結果を表示します。";
         }
@@ -94,34 +104,87 @@ class baseConf extends basePage{
     }
     
     
-    private function checkGet(){
+    private function checkGet($get){
         $cnv = array();
-        foreach ($_GET as $key => $value) {
+        foreach ($get as $key => $value) {
             $cnv[$key] = mb_convert_kana((mb_convert_encoding($value, "UTF-8", "auto" )), "aKV"); 
         }
         unset($key, $value);
-        //var_dump($cnv);
-        $post = $this->escapeNullByte($cnv);
-        $p = print_r($post, TRUE);
-        if(!isset($post['query'])){
-            $this->result = "ヤフーオークションからの検索結果を表示します。";
-            return;
-        } elseif ($post['query'] == "") {
+        $data = $this->escapeNullByte($cnv);
+        //check query
+        if(empty($data["query"])){
             $this->result = "検索する文字列を入力してください。";
-            return;
+            return FALSE;
         } else {
-            $this->result = '検索ワード:"'. htmlspecialchars($post['query'], ENT_QUOTES, 'UTF-8') . '"';
+            $this->result = '検索ワード:"'. htmlspecialchars($data["query"], ENT_QUOTES, "UTF-8") . '"';
         }
-        $this->data = $post;
-        $post['output'] = "xml";
-        $res = $this->send($post, self::sendUrl);
-        if($res == FALSE){
-            $this->result = "検索結果の取得に失敗しました。時間をおいて再度検索してください。";
+        //check category
+        if(!empty($data["mCategory"]) && !preg_match("/^[0-9]+$/", $data["mCategory"])){
+            $this->result = "エラーが発生しました。";
             return FALSE;
         }
-        $this->createDisp($res);
-        
-
+        $data["category"] = $data["mCategory"];
+        if(!empty($data["sCategory"]) && preg_match("/^[0-9]+$/", $data["sCategory"])){
+            $data["category"] = $data["sCategory"];
+        }
+        //check sort
+        if(!empty($data["sort"]) && !preg_match("/^[a-z]+$/", $data["sort"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check order
+        if(!preg_match("/^[ad]$/", $data["order"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check store
+        if(!preg_match("/^[0-2]$/", $data["store"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check aucminprice
+        if(!empty($data["aucminprice"]) && !preg_match("/^[0-9]+$/", $data["aucminprice"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check aucmaxprice
+        if(!empty($data["aucmaxprice"]) && !preg_match("/^[0-9]+$/", $data["aucmaxprice"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check aucmin_bidorbuy_price
+        if(!empty($data["aucmin_bidorbuy_price"]) && !preg_match("/^[0-9]+$/", $data["aucmin_bidorbuy_price"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check aucmax_bidorbuy_price
+        if(!empty($data["aucmax_bidorbuy_price"]) && !preg_match("/^[0-9]+$/", $data["aucmax_bidorbuy_price"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check loc_cd
+        if(!empty($data["loc_cd"]) && !preg_match("/^[0-9]+$/", $data["loc_cd"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check buynow
+        if(!empty($data["buynow"]) && !preg_match("/^[1]$/", $data["buynow"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check item_status
+        if(!preg_match("/^[0-2]$/", $data["item_status"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        //check adf
+        if(!preg_match("/^[0-1]$/", $data["adf"])){
+            $this->result = "エラーが発生しました。";
+            return FALSE;
+        }
+        $this->data = $data;
+        $data['output'] = "xml";
+        return $data;
     }
     
     /**
