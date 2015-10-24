@@ -24,7 +24,9 @@ class baseCategory extends basePage{
         $host = $url["host"];
         if($host == "yahoaucer.jpn.ph"){
             $data = $this->chkPost($_POST);
-            if($data !== FALSE){
+            if(empty($data["val"])){
+                $this->html = "<option value=\"\">カテゴリを選択してください</option>";
+            } else if($data !== FALSE){
                 $this->db = new databaseConfig();
                 //$this->getCategory();
                 $this->html = $this->createHtml($data["val"]);
@@ -50,10 +52,11 @@ class baseCategory extends basePage{
             $cnv[$key] = mb_convert_kana((mb_convert_encoding($value, "UTF-8", "auto" )), "aKV"); 
         }
         unset($key, $value);
-        //var_dump($cnv);
         $data = $this->escapeNullByte($cnv);
-        if(preg_match("/^[0-9]+$/", $data["val"])){
-              return $data;  
+        if(empty($post["val"])){
+            return $data;
+        } elseif(preg_match("/^[0-9]+$/", $data["val"])){
+            return $data;  
         }
         return FALSE;
     }
