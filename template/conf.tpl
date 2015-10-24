@@ -133,14 +133,14 @@ nav#mainmenu ul li a {
                         <p>現在価格: 
                         </p>
                         <p>
-                            <input type="text" name="aucminprice" id="priceBox" style="width: 90px">円 ～ 
-                            <input type="text" name="aucmaxprice" id="priceBox" style="width: 90px">円
+                            <input type="text" name="aucminprice" value="<?php if(isset($data['aucminprice'])) echo htmlspecialchars($data['aucminprice'], ENT_QUOTES, 'UTF-8'); ?>" id="priceBox" style="width: 90px">円 ～ 
+                            <input type="text" name="aucmaxprice" value="<?php if(isset($data['aucmaxprice'])) echo htmlspecialchars($data['aucmaxprice'], ENT_QUOTES, 'UTF-8'); ?>" id="priceBox" style="width: 90px">円
                         </p>
                         <p>即決価格: 
                         </p>
                         <p>
-                            <input type="text" name="aucmin_bidorbuy_price" id="priceBox" style="width: 90px">円 ～ 
-                            <input type="text" name="aucmax_bidorbuy_price" id="priceBox" style="width: 90px">円
+                            <input type="text" name="aucmin_bidorbuy_price" value="<?php if(isset($data['aucmin_bidorbuy_price'])) echo htmlspecialchars($data['aucmin_bidorbuy_price'], ENT_QUOTES, 'UTF-8'); ?>" id="priceBox" style="width: 90px">円 ～ 
+                            <input type="text" name="aucmax_bidorbuy_price" value="<?php if(isset($data['aucmax_bidorbuy_price'])) echo htmlspecialchars($data['aucmax_bidorbuy_price'], ENT_QUOTES, 'UTF-8'); ?>" id="priceBox" style="width: 90px">円
                         </p>
                         <p>
                             <label> 

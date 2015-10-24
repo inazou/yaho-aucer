@@ -111,6 +111,7 @@ class baseConf extends basePage{
         }
         unset($key, $value);
         $data = $this->escapeNullByte($cnv);
+        $this->data = $data;
         //check query
         if(empty($data["query"])){
             $this->result = "ヤフーオークションからの検索結果を表示します。";
@@ -144,22 +145,22 @@ class baseConf extends basePage{
         }
         //check aucminprice
         if(!empty($data["aucminprice"]) && !preg_match("/^[0-9]+$/", $data["aucminprice"])){
-            $this->result = "エラーが発生しました。";
+            $this->result = "価格は数字で入力してください。";
             return FALSE;
         }
         //check aucmaxprice
         if(!empty($data["aucmaxprice"]) && !preg_match("/^[0-9]+$/", $data["aucmaxprice"])){
-            $this->result = "エラーが発生しました。";
+            $this->result = "価格は数字で入力してください。";
             return FALSE;
         }
         //check aucmin_bidorbuy_price
         if(!empty($data["aucmin_bidorbuy_price"]) && !preg_match("/^[0-9]+$/", $data["aucmin_bidorbuy_price"])){
-            $this->result = "エラーが発生しました。";
+            $this->result = "価格は数字で入力してください。";
             return FALSE;
         }
         //check aucmax_bidorbuy_price
         if(!empty($data["aucmax_bidorbuy_price"]) && !preg_match("/^[0-9]+$/", $data["aucmax_bidorbuy_price"])){
-            $this->result = "エラーが発生しました。";
+            $this->result = "価格は数字で入力してください。";
             return FALSE;
         }
         //check loc_cd
@@ -182,7 +183,6 @@ class baseConf extends basePage{
             $this->result = "エラーが発生しました。";
             return FALSE;
         }
-        $this->data = $data;
         $data['output'] = "xml";
         return $data;
     }
