@@ -137,10 +137,10 @@ EOF;
                 $html .=<<<EOF
                         selected
 EOF;
+            }
             $html .= <<<EOF
                     >{$val["name"]}</option>
 EOF;
-            }
         }
         return $html;
     }
