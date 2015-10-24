@@ -82,7 +82,7 @@ nav#mainmenu ul li a {
 <nav id="mainmenu">
     <form method="get" action="./conf" id="search">
         <div id="searchBox">
-            <input type="text" name="query" id="textBox" placeholder="キーワードから探す"><input type="submit" value="検索" id="btn">
+            <input type="text" name="query" id="textBox" value="<?php if(isset($data['query'])) htmlspecialchars($data['query'], ENT_QUOTES, 'UTF-8') ?>" placeholder="キーワードから探す"><input type="submit" value="検索" id="btn">
         </div>
 <ul>
     

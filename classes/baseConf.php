@@ -512,5 +512,14 @@ EOF;
         return $this->pager;
     }
     
+    /**
+     * 検索条件データを取得
+     * @access public
+     * @return type
+     */
+    public function getData(){
+        return $this->data;
+    }
+    
 }
 
