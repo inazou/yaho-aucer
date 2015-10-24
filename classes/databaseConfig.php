@@ -85,13 +85,6 @@ class databaseConfig {
        $stmt->execute();
    }
    
-   /**
-    * disconnect database
-    * @access private
-    */
-   private function discon(){
-       $this->pdo = null;
-   }
    
     public function insertPrefectures($id , $name){
         $stmt = $this->pdo->prepare("INSERT INTO prefectures (id, name) VALUES (?, ?)");
@@ -101,13 +94,19 @@ class databaseConfig {
         $stmt->execute();
     }
     
+    public function insertCategory($param){
+        $this->con();
+        $query = "INSERT INTO `category` (`id`, `name`, `parentId`) VALUES (?, ?, ?)";
+        $type = "isi";
+        $this->plQuery($query, $param, $type);
+    }
+    
     
     
     public function getPrefecturesAll(){
         $this->con();
         $query = "SELECT * FROM prefectures";
         $res=$this->query($query);
-        $this->discon();
         return $res;
     }
 }

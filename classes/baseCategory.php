@@ -6,7 +6,7 @@ class baseCategory extends basePage{
     
     /**
      * データベース
-     * @var Object
+     * @var databaseConfig
      */
     private $db;
     
@@ -17,6 +17,7 @@ class baseCategory extends basePage{
         $url = parse_url($referer);
         $host = $url["host"];
         if($host == "yahoaucer.jpn.ph"){
+            $this->db = new databaseConfig();
             $this->getCategory();
            //postチェック
             error_log($_POST['val']);
@@ -29,13 +30,22 @@ class baseCategory extends basePage{
     private function chkPost(){
     }
     
-    
+    /**
+     * ヤフーAPIからカテゴリデータを取得し、データベースに格納
+     * @access private
+     */
     private function getCategory(){
         $param = array("output" => "xml");
         $xml = $this->send($param, self::sendUrl);
         error_log($xml);
         $res = $this->scrapCategoryXml($xml);
         error_log(print_r($res, TRUE));
+        foreach ($res as $val){
+            $param = array($val["CategoryId"],
+                $val["CategoryName"],
+                $val["ParentId"]);
+            $this->db->insertCategory($param);
+        }
         
         
     }
