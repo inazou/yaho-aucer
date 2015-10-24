@@ -40,7 +40,7 @@ nav#mainmenu ul li a {
                         {
                             val : opt
                         } ,
-                        function(data , status){
+                        function(data){
                             $("#sCategory").html(data);
                         }
                     );
@@ -93,7 +93,7 @@ nav#mainmenu ul li a {
                         <p>
                             <label>
                                 
-                                カテゴリ: <select name = "category"id="mCategory">
+                                カテゴリ: <select name = "mCategory"id="mCategory">
                                         <option value="">
                                             選択してください
                                         </option>
@@ -107,7 +107,7 @@ nav#mainmenu ul li a {
                         <p>
                             <label>
                                 
-                                サブカテゴリ: <select name = "category" id="sCategory">
+                                サブカテゴリ: <select name = "sCategory" id="sCategory">
                                         <option value="">
                                             カテゴリを選択してください
                                         </option>
