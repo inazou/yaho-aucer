@@ -238,11 +238,11 @@ class baseConf extends basePage{
     private function createLocId(){
         $res = $this->db->getPrefecturesAll();
         for($i = 0; $i < count($res); $i++){
-            $this->locId .= "<option value =\"{$res[$i]["id"]}\"";
+            $this->locId .= '<option value ="' . $res[$i]["id"] . '"';
             if(isset($this->data["loc_cd"]) && $this->data["loc_cd"] == $res[$i]["id"]){
                 $this->locId .= "selected";
             }
-            $this->locId .= ">{$res[$i]["name"]}</option>";
+            $this->locId .= '>' . $res[$i]["name"] . '</option>';
         }
         return;
     }

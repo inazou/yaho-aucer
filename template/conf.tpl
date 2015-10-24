@@ -47,6 +47,24 @@ nav#mainmenu ul li a {
                 });
             });
             
+            $(document).ready(function(){
+                $(function(){
+                    $('#mCategory').change(function(){
+                        //  親要素が変更した時の処理
+                        var opt = $("#mCategory option:selected").val();
+                        $.post(
+                            "./category.php" ,
+                            {
+                                val : opt
+                            } ,
+                            function(data){
+                                $("#sCategory").html(data);
+                            }
+                        );
+                    });
+                });
+            });
+            
         </script> 
     </head>
 <body>
