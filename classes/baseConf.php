@@ -199,7 +199,11 @@ class baseConf extends basePage{
             $this->result = "カテゴリの取得に失敗しました。時間をおいて再度このページにアクセスしてください。";
         }
         foreach ($cat as $val) {
-            $this->category .= '<option value ="'. $val["id"] . '">'. $val["name"] . '</option>';
+            $this->category .= '<option value ="'. $val["id"] . '"';
+            if(isset($this->data["mCategory"]) && $this->data["mCategory"] == $val["id"]){
+                $this->category .= "selected";
+            }
+            $this->category .= '>'. $val["name"] . '</option>';
         }
         return TRUE;
     }
@@ -217,7 +221,11 @@ class baseConf extends basePage{
             '即決価格' => 'bidorbuy');
         
         foreach ($so as $key => $value) {
-            $this->sort .= '<option value ="'. $value . '">'. $key . '</option>';
+            $this->sort .= '<option value ="'. $value . '"';
+            if(isset($this->data["sort"]) && $this->data["sort"] == $value){
+                $this->sort .= "selected";
+            }
+            $this->sort .= '>'. $key . '</option>';
         }
         
         return;
@@ -230,7 +238,11 @@ class baseConf extends basePage{
     private function createLocId(){
         $res = $this->db->getPrefecturesAll();
         for($i = 0; $i < count($res); $i++){
-            $this->locId .= "<option value =\"{$res[$i]["id"]}\">{$res[$i]["name"]}</option>";
+            $this->locId .= "<option value =\"{$res[$i]["id"]}\"";
+            if(isset($this->data["loc_cd"]) && $this->data["loc_cd"] == $res[$i]["id"]){
+                $this->locId .= "selected";
+            }
+            $this->locId .= ">{$res[$i]["name"]}</option>";
         }
         return;
     }

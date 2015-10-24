@@ -128,8 +128,8 @@ nav#mainmenu ul li a {
                                 </select>
                             </label>
                         </p>
-                        <p>表示順: <input type="radio" name="order" value="a" checked>昇順 <input type="radio" name="order" value="d">降順</p>
-                        <p>出品者: <input type="radio" name="store" value="0" checked>すべて <input type="radio" name="store" value="1">ストア <input type="radio" name="store" value="2">個人</p>
+                        <p>表示順: <input type="radio" name="order" value="a" checked>昇順 <input type="radio" name="order" value="d" <?php if(isset($data['order']) && $data['order'] == 'd') echo 'checked'; ?> >降順</p>
+                        <p>出品者: <input type="radio" name="store" value="0" checked>すべて <input type="radio" name="store" value="1" <?php if(isset($data['store']) && $data['store'] == 1) echo 'checked'; ?> >ストア <input type="radio" name="store" value="2" <?php if(isset($data['store']) && $data['store'] == 2) echo 'checked'; ?> >個人</p>
                         <p>現在価格: 
                         </p>
                         <p>
