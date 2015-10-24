@@ -30,18 +30,12 @@ class databaseConfig {
    }
    
    /**
-    * @access private
-    */
-   private function con(){
-        $this->pdo->query('SET NAMES utf8');
-   }
-   
-   /**
     * do query without placeholder
     * @access private
     * @return mixed
     */
    private function query($query){
+       $this->pdo->query('SET NAMES utf8');
        $stmt = $this->pdo->query($query);
        if (!$stmt) {
             $info = $this->pdo->errorInfo();
@@ -62,50 +56,8 @@ class databaseConfig {
     * @param string $query, $type array $param
     * @return mixed
     */
-   private function plQuery($query, $param, $type){
-       $stmt = $this->pdo->prepare($query);
-       if(count($param) != strlen($type)){
-            error_log("QUERY ERROR PARAM:" . print_r($param, TRUE));
-            return FALSE;
-       }
-       for($i = 0; $i < count($param); $i++){
-           if(substr($type, $i, 1) == "i"){
-               $val = (int)$param[$i];
-               $pdo = PDO::PARAM_INT;
-            }elseif(substr($type, $i, 1) == "s") {
-                $val = (string)$param[$i];
-               $pdo = PDO::PARAM_STR;
-            } else{
-                error_log("QUERY ERROR TYPE:" . $type);
-                return FALSE;
-            }
-           $stmt->bindParam($i + 1, $val, $pdo);
-       }
-       $stmt->execute();
-   }
-   
-   
-    public function insertPrefectures($id , $name){
-        $stmt = $this->pdo->prepare("INSERT INTO prefectures (id, name) VALUES (?, ?)");
+   private function plQuery($query, $param){
         $this->pdo->query('SET NAMES utf8');
-        $stmt->bindParam(1, $id);
-        $stmt->bindParam(2, $name);
-        $stmt->execute();
-    }
-    
-    public function insertCategory($param){
-        $this->con();
-        $query = "INSERT INTO `category` (`id`, `name`, `parentId`) VALUES (?, ?, ?)";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->bindParam(1, $param[0]);
-        $stmt->bindParam(2, $param[1]);
-        $stmt->bindParam(3, $param[2]);
-        $stmt->execute();
-    }
-    
-    public function getCategory($param){
-        $this->con();
-        $query = "SELECT `id`, `name` FROM `category` WHERE `parentId` = ?";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($param);
         if (!$stmt) {
@@ -119,17 +71,53 @@ class databaseConfig {
             $i++;
         }
         return $res;
+   }
+   
+   /**
+    * insert into prefectures 
+    * @access public
+    * @param $param array
+    * @return mixed 
+    */
+    public function insertPrefectures($param){
+        $query = "INSERT INTO prefectures (id, name) VALUES (?, ?)";
+        $res = $this->plQuery($query, $param);
+        return $res;
+    }
+    
+    /**
+    * insert into category 
+    * @access public
+    * @param $param array
+    * @return mixed 
+    */
+    public function insertCategory($param){
+        $query = "INSERT INTO `category` (`id`, `name`, `parentId`) VALUES (?, ?, ?)";
+        $res = $this->plQuery($query, $param);
+        return $res;
+    }
+    
+    /**
+    * select id, name from category where parentId 
+    * @access public
+    * @param $param array
+    * @return mixed 
+    */
+    public function getCategory($param){
+        $query = "SELECT `id`, `name` FROM `category` WHERE `parentId` = ?";
+        $res = $this->plQuery($query, $param);
+        return $res;
     }
 
-
-
-
-
-
+    /**
+    * select * from prefectures  
+    * @access public
+    * @param $param array
+    * @return mixed 
+    */
     public function getPrefecturesAll(){
-        $this->con();
         $query = "SELECT * FROM prefectures";
-        $res=$this->query($query);
+        $res = $this->query($query);
         return $res;
     }
 }
