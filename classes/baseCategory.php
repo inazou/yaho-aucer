@@ -23,7 +23,7 @@ class baseCategory extends basePage{
         $url = parse_url($referer);
         $host = $url["host"];
         if($host == "yahoaucer.jpn.ph"){
-            $data = $this->chkPost($post);
+            $data = $this->chkPost($_POST);
             if($data !== FALSE){
                 $this->db = new databaseConfig();
                 //$this->getCategory();
