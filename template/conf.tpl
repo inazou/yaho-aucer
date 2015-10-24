@@ -49,7 +49,7 @@ nav#mainmenu ul li a {
             
             $(document).ready(function(){
                 var opt = $("#mCategory option:selected").val();
-                var sOpt = <?php if(isset($data["sCategory"])){echo json_encode($data["sCategory"]);}else{echo "";} ?>;
+                var sOpt = <?php if(isset($data["sCategory"])){echo json_encode($data["sCategory"]);}else{echo "''";} ?>;
                 $.post(
                     "./category" ,
                     {
