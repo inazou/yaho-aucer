@@ -97,9 +97,10 @@ class databaseConfig {
     public function insertCategory($param){
         $this->con();
         $query = "INSERT INTO `category` (`id`, `name`, `parentId`) VALUES (?, ?, ?)";
+        $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(1, $param[0]);
         $stmt->bindParam(2, $param[1]);
-        $stmt->bindParam(2, $param[2]);
+        $stmt->bindParam(3, $param[2]);
         $stmt->execute();
     }
     
