@@ -18,7 +18,7 @@ class baseCategory extends basePage{
         $host = $url["host"];
         if($host == "yahoaucer.jpn.ph"){
             $this->db = new databaseConfig();
-            $this->getCategory();
+            //$this->getCategory();
            //postチェック
             error_log($_POST['val']);
             echo "<option value=\"1\">内容</option>";
