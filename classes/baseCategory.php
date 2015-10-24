@@ -44,9 +44,10 @@ class baseCategory extends basePage{
             $this->insert($val1);
             $param["category"] = $val1["category"];
             $xml2 = $this->send($param, self::sendUrl);
+            error_log($xml2);
             $res2 = $this->scrapCategoryXml($xml2);
             foreach ($res2 as $val2){
-                $this->insert($val2);
+                //$this->insert($val2);
             }
         }
     }
