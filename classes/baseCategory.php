@@ -10,6 +10,12 @@ class baseCategory extends basePage{
      */
     private $db;
     
+    /**
+     * サブカテゴリのoptionタグ
+     * @var string
+     */
+    private $html = "";
+    
     public function __construct() {
         parent::__construct();
         //リファラーチェック
@@ -17,17 +23,39 @@ class baseCategory extends basePage{
         $url = parse_url($referer);
         $host = $url["host"];
         if($host == "yahoaucer.jpn.ph"){
-            $this->db = new databaseConfig();
-            //$this->getCategory();
-           //postチェック
-            error_log($_POST['val']);
-            echo "<option value=\"1\">内容</option>";
+            $data = $this->chkPost($post);
+            if($data !== FALSE){
+                $this->db = new databaseConfig();
+                //$this->getCategory();
+                $this->html = $this->createHtml($data["val"]);
+            }else{
+                error_log('POST PARAM ERROR:'. print_r($_POST, TRUE));
+                $this->html = "<option value=\"\">データ取得に失敗しました</option>";
+            }
         }else{
             error_log('REFERRER ERROR:'. $_SERVER["REMOTE_ADDR"]);
+            $this->html = "<option value=\"\">データ取得に失敗しました</option>";
         }
     }
     
-    private function chkPost(){
+    /**
+     * POSTデータをチェック
+     * @param array $post
+     * @access private
+     * @return mixed
+     */
+    private function chkPost($post){
+        $cnv = array();
+        foreach ($post as $key => $value) {
+            $cnv[$key] = mb_convert_kana((mb_convert_encoding($value, "UTF-8", "auto" )), "aKV"); 
+        }
+        unset($key, $value);
+        //var_dump($cnv);
+        $data = $this->escapeNullByte($cnv);
+        if(preg_match("/^[0-9]+$/", $data["val"])){
+              return $data;  
+        }
+        return FALSE;
     }
     
     /**
@@ -37,14 +65,11 @@ class baseCategory extends basePage{
     private function getCategory(){
         $param = array("output" => "xml");
         $xml1 = $this->send($param, self::sendUrl);
-        error_log($xml1);
         $res1 = $this->scrapCategoryXml($xml1);
-        error_log(print_r($res1, TRUE));
         foreach ($res1 as $val1){
             $this->insert($val1);
             $param["category"] = $val1["CategoryId"];
             $xml2 = $this->send($param, self::sendUrl);
-            error_log($xml2);
             $res2 = $this->scrapCategoryXml($xml2);
             foreach ($res2 as $val2){
                 $this->insert($val2);
@@ -64,7 +89,7 @@ class baseCategory extends basePage{
         $this->db->insertCategory($param);
     }
 
-        /**
+    /**
      * xmlをスクレーピングし配列化
      * @access private
      * @param string
@@ -84,5 +109,34 @@ class baseCategory extends basePage{
             $resarr[$i]['ParentId'] = $xpath->evaluate('string(//x:Result/x:CategoryId)');
         }
         return $resarr;
+    }
+    
+    /**
+     * 親のidから子のカテゴリのoptionタグを生成
+     * @access private
+     * @param int
+     * @return string
+     */
+    private function createHtml($id){
+        $res = $this->db->getCategory(array($id));
+        if($res === FALSE || count($res) == 0){
+            return "<option value=\"\">データ取得に失敗しました</option>";
+        }
+        $html = "";
+        foreach ($res as $val){
+            $html .= <<<EOF
+                    <option value="{$val["id"]}">{$val["name"]}</option>
+EOF;
+        }
+        return $html;
+    }
+    
+    /**
+     * サブカテゴリのセレクトボックスの中身を取得
+     * @access public
+     * @return string
+     */
+    public function getHtml(){
+        return $this->html;
     }
 }

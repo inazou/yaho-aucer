@@ -20,20 +20,19 @@ class databaseConfig {
    public function __construct() {
         $xml = topDir . '/xml/database.xml';
         $this->data = json_decode(json_encode(simplexml_load_file($xml)),TRUE);
-   }
-   
-   /**
-    * connect database
-    * @access private
-    */
-   private function con(){
-       $db = "mysql:host={$this->data["host"]};dbname={$this->data["dbname"]};charset=utf8";
+        $db = "mysql:host={$this->data["host"]};dbname={$this->data["dbname"]};charset=utf8";
        try {
-            $this->pdo = new PDO($db, $this->data["user"], $this->data["pass"]);
+            $this->pdo = new PDO($db, $this->data["user"], $this->data["pass"], array(PDO::ATTR_PERSISTENT => true));
         } catch (PDOException $e) {
             error_log("CANNOT CONNECT THE DATABASE:" . $e->getMessage());
             exit('we cannot connect the database');
         }
+   }
+   
+   /**
+    * @access private
+    */
+   private function con(){
         $this->pdo->query('SET NAMES utf8');
    }
    
@@ -104,8 +103,29 @@ class databaseConfig {
         $stmt->execute();
     }
     
-    
-    
+    public function getCategory($param){
+        $this->con();
+        $query = "SELECT `id`, `name` FROM `category` WHERE `parentId` = ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($param);
+        if (!$stmt) {
+            $info = $this->pdo->errorInfo();
+            error_log("QUERY ERROR" . print_r($info, TRUE));
+            return FALSE;
+        }
+        $i = 0;
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[$i] = $data;
+            $i++;
+        }
+        return $res;
+    }
+
+
+
+
+
+
     public function getPrefecturesAll(){
         $this->con();
         $query = "SELECT * FROM prefectures";
