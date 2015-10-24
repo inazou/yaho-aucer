@@ -113,7 +113,7 @@ class baseConf extends basePage{
         $data = $this->escapeNullByte($cnv);
         //check query
         if(empty($data["query"])){
-            $this->result = "検索する文字列を入力してください。";
+            $this->result = "ヤフーオークションからの検索結果を表示します。";
             return FALSE;
         } else {
             $this->result = '検索ワード:"'. htmlspecialchars($data["query"], ENT_QUOTES, "UTF-8") . '"';
