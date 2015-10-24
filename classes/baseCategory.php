@@ -31,26 +31,39 @@ class baseCategory extends basePage{
     }
     
     /**
-     * ヤフーAPIからカテゴリデータを取得し、データベースに格納
+     * ヤフーAPIからカテゴリデータを取得し、データベースにインサート
      * @access private
      */
     private function getCategory(){
         $param = array("output" => "xml");
-        $xml = $this->send($param, self::sendUrl);
-        error_log($xml);
-        $res = $this->scrapCategoryXml($xml);
-        error_log(print_r($res, TRUE));
-        foreach ($res as $val){
-            $param = array($val["CategoryId"],
-                $val["CategoryName"],
-                $val["ParentId"]);
-            $this->db->insertCategory($param);
+        $xml1 = $this->send($param, self::sendUrl);
+        error_log($xml1);
+        $res1 = $this->scrapCategoryXml($xml1);
+        error_log(print_r($res1, TRUE));
+        foreach ($res1 as $val1){
+            $this->insert($val1);
+            $param["category"] = $val1["category"];
+            $xml2 = $this->send($param, self::sendUrl);
+            $res2 = $this->scrapCategoryXml($xml2);
+            foreach ($res2 as $val2){
+                $this->insert($val2);
+            }
         }
-        
-        
     }
     
     /**
+     * カテゴリ情報をデータベースにインサート
+     * @param $val array
+     * @access private
+     */
+    private function insert($val){
+        $param = array($val["CategoryId"],
+                $val["CategoryName"],
+                $val["ParentId"]);
+        $this->db->insertCategory($param);
+    }
+
+        /**
      * xmlをスクレーピングし配列化
      * @access private
      * @param string
