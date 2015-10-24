@@ -29,7 +29,7 @@ class baseCategory extends basePage{
             } else if($data !== FALSE){
                 $this->db = new databaseConfig();
                 //$this->getCategory();
-                $this->html = $this->createHtml($data["val"]);
+                $this->html = $this->createHtml($data);
             }else{
                 error_log('POST PARAM ERROR:'. print_r($_POST, TRUE));
                 $this->html = "<option value=\"\">データ取得に失敗しました</option>";
@@ -53,12 +53,13 @@ class baseCategory extends basePage{
         }
         unset($key, $value);
         $data = $this->escapeNullByte($cnv);
-        if(empty($post["val"])){
-            return $data;
-        } elseif(preg_match("/^[0-9]+$/", $data["val"])){
-            return $data;  
+        if(!empty($data["val"]) && !preg_match("/^[0-9]+$/", $data["val"])){
+            return FALSE;
+        } 
+        if(!empty($data["sVal"]) && !preg_match("/^[0-9]+$/", $data["sVal"])){
+            return FALSE;
         }
-        return FALSE;
+        return $data;
     }
     
     /**
@@ -117,11 +118,11 @@ class baseCategory extends basePage{
     /**
      * 親のidから子のカテゴリのoptionタグを生成
      * @access private
-     * @param int
+     * @param array
      * @return string
      */
-    private function createHtml($id){
-        $res = $this->db->getCategory(array($id));
+    private function createHtml($data){
+        $res = $this->db->getCategory(array($data["val"]));
         if($res === FALSE || count($res) == 0){
             return "<option value=\"\">データ取得に失敗しました</option>";
         }
@@ -130,8 +131,16 @@ class baseCategory extends basePage{
 EOF;
         foreach ($res as $val){
             $html .= <<<EOF
-                    <option value="{$val["id"]}">{$val["name"]}</option>
+                    <option value="{$val["id"]}"
 EOF;
+            if(isset($data["sVal"]) && $data["sVal"] == $val["id"]){
+                $html .=<<<EOF
+                        selected
+EOF;
+            $html .= <<<EOF
+                    >{$val["name"]}</option>
+EOF;
+            }
         }
         return $html;
     }
