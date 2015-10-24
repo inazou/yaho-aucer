@@ -157,9 +157,9 @@ nav#mainmenu ul li a {
                             </label>
                              
                         </p>
-                        <p>購入方法: <input type="radio" name="buynow" value="" checked>指定なし <input type="radio" name="buynow" value="1">即決</p>
-                        <p>商品状態: <input type="radio" name="item_status" value="0" checked>指定なし <input type="radio" name="item_status" value="1">新品 <input type="radio" name="item_status" value="2">中古</p>
-                        <p>アダルト: <input type="radio" name="adf" value="0" checked>なし <input type="radio" name="adf" value="1">あり</p>
+                        <p>購入方法: <input type="radio" name="buynow" value="" checked>指定なし <input type="radio" name="buynow" value="1" <?php if(isset($data['buynow']) && $data['buynow'] == 1) echo 'checked'; ?> >即決</p>
+                        <p>商品状態: <input type="radio" name="item_status" value="0" checked>指定なし <input type="radio" name="item_status" value="1" <?php if(isset($data['item_status']) && $data['item_status'] == 1) echo 'checked'; ?> >新品 <input type="radio" name="item_status" value="2" <?php if(isset($data['item_status']) && $data['item_status'] == 2) echo 'checked'; ?> >中古</p>
+                        <p>アダルト: <input type="radio" name="adf" value="0" checked>なし <input type="radio" name="adf" value="1" <?php if(isset($data['adf']) && $data['adf'] == 1) echo 'checked'; ?> >あり</p>
                         
                         
                     </div>
