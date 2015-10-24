@@ -122,7 +122,9 @@ class baseCategory extends basePage{
         if($res === FALSE || count($res) == 0){
             return "<option value=\"\">データ取得に失敗しました</option>";
         }
-        $html = "";
+        $html = <<<EOF
+                    <option value=\"\">選択なし</option>
+EOF;
         foreach ($res as $val){
             $html .= <<<EOF
                     <option value="{$val["id"]}">{$val["name"]}</option>
