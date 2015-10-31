@@ -58,10 +58,25 @@ nav#mainmenu ul li a {
                     } ,
                     function(data){
                         $("#sCategory").html(data);
+                        getPrice();
                     }
                 );
-            });
-            
+        
+                function getPrice(){
+                    $.post(
+                        "./price" ,
+                        {
+                            query : $("#textBox").val(),
+                            mCategory : $("#mCategory option:selected").val(),
+                            sCategory : $("#sCategory option:selected").val(),
+                            store : $('input[name="store"]:checked').val()
+                        } ,
+                        function(data){
+                            $("#sCategory").html(data);
+                        }
+                    );
+                }
+            })
         </script> 
     </head>
 <body>
@@ -132,7 +147,7 @@ nav#mainmenu ul li a {
                         <p>
                             <label>
                                 
-                                並べ替え: <select name = "sort">
+                                並べ替え: <select name = "sort" id="sort">
                                         <option value="">
                                             選択してください
                                         </option>
