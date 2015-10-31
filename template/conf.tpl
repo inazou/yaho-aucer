@@ -69,7 +69,11 @@ nav#mainmenu ul li a {
                             query : $("#textBox").val(),
                             mCategory : $("#mCategory option:selected").val(),
                             sCategory : $("#sCategory option:selected").val(),
-                            store : $('input[name="store"]:checked').val()
+                            store : $('input[name="store"]:checked').val(),
+                            loc_cd : $("#loc_cd option:selected").val(),
+                            buynow : $('input[name="buynow"]:checked').val(),
+                            item_status : $('input[name="item_status"]:checked').val(),
+                            adf : $('input[name="adf"]:checked').val()
                         } 
                     );
                 }
@@ -172,7 +176,7 @@ nav#mainmenu ul li a {
                         <p>
                             <label> 
                                 出品地域: 
-                                <select name = "loc_cd">
+                                <select name = "loc_cd" id="loc_cd">
                                         <option value="">
                                             すべて
                                         </option>
