@@ -60,7 +60,7 @@ nav#mainmenu ul li a {
                         $("#sCategory").html(data);
                     }
                 );
-                getPrice();
+                //getPrice();
                 function getPrice(){
                     $.post(
                         "./price" ,
