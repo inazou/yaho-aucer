@@ -58,10 +58,9 @@ nav#mainmenu ul li a {
                     } ,
                     function(data){
                         $("#sCategory").html(data);
-                        getPrice();
                     }
                 );
-        
+                getPrice();
                 function getPrice(){
                     $.post(
                         "./price" ,
