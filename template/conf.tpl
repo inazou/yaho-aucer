@@ -71,10 +71,10 @@ nav#mainmenu ul li a {
                             store : $('input[name="store"]:checked').val()
                         } ,
                         function(data){
-                            $("#sCategory").html(data);
                         }
                     );
                 });
+
             })
         </script> 
     </head>
