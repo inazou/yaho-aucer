@@ -48,20 +48,21 @@ nav#mainmenu ul li a {
             });
             
             $(document).ready(function(){
-                $.when(function(){
-                    var opt = $("#mCategory option:selected").val();
-                    var sOpt = <?php if(isset($data["sCategory"])){echo json_encode($data["sCategory"]);}else{echo "''";} ?>;
-                    $.post(
-                        "./category" ,
-                        {
-                            val : opt,
-                            sVal : sOpt
-                        } ,
-                        function(data){
-                            $("#sCategory").html(data);
-                        }
-                    );
-                }).done(function(){
+                var opt = $("#mCategory option:selected").val();
+                var sOpt = <?php if(isset($data["sCategory"])){echo json_encode($data["sCategory"]);}else{echo "''";} ?>;
+                $.post(
+                    "./category" ,
+                    {
+                        val : opt,
+                        sVal : sOpt
+                    } ,
+                    function(data){
+                        $("#sCategory").html(data);
+                        getPrice();
+                    }
+                );
+        
+                function getPrice(){
                     $.post(
                         "./price" ,
                         {
@@ -69,12 +70,9 @@ nav#mainmenu ul li a {
                             mCategory : $("#mCategory option:selected").val(),
                             sCategory : $("#sCategory option:selected").val(),
                             store : $('input[name="store"]:checked').val()
-                        } ,
-                        function(data){
-                        }
+                        } 
                     );
-                });
-
+                }
             })
         </script> 
     </head>
