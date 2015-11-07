@@ -77,6 +77,7 @@ nav#mainmenu ul li a {
                         } ,
                         function(data){
                             $("#price").html(data);
+                        }
                     );
                 }
             })
