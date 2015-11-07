@@ -76,7 +76,7 @@ nav#mainmenu ul li a {
                             adf : $('input[name="adf"]:checked').val()
                         } ,
                         function(data){
-                            
+                            $("#price").html(data);
                     );
                 }
             })
@@ -200,12 +200,6 @@ nav#mainmenu ul li a {
 </nav>
 
 <div id="price">
-<aside class="box1 mb1em">
-<p>"xxx"の落札相場<br>
-平均落札価格 XXX円<br>
-最低落札価格 XXX円<br>
-最高落札価格 XXX円</p>
-</aside>
 </div>
 
 </div>
