@@ -74,7 +74,9 @@ nav#mainmenu ul li a {
                             buynow : $('input[name="buynow"]:checked').val(),
                             item_status : $('input[name="item_status"]:checked').val(),
                             adf : $('input[name="adf"]:checked').val()
-                        } 
+                        } ,
+                        function(data){
+                            
                     );
                 }
             })
@@ -197,14 +199,14 @@ nav#mainmenu ul li a {
         </form>
 </nav>
 
-
+<div id="price">
 <aside class="box1 mb1em">
 <p>"xxx"の落札相場<br>
 平均落札価格 XXX円<br>
 最低落札価格 XXX円<br>
 最高落札価格 XXX円</p>
 </aside>
-
+</div>
 
 </div>
 <!--/sub-->
