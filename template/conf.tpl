@@ -5,6 +5,8 @@
         <title>Yaho!-aucer</title>
         <meta name="viewport" content="width=device-width">
         <meta name="copyright" content="Template Party">
+        <meta name="keywords" content="ヤフオク, 検索, 出品, yahoo, ヤフー, オークション, 価格">
+        <meta name="description" content="ヤフーオークション出品者向け価格検索サイト。現在どれぐらいの価格なら出品物が入札されるのか簡単に検索できます。">
         <link rel="stylesheet" href="template/css/style.css" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 <!--[if lt IE 9]>
