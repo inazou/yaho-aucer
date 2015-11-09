@@ -63,15 +63,15 @@ class basePrice extends basePage{
      * @return string
      */
     private function createDisp($priceData){
-        $max = max($priceData);
-        $min = min($priceData);
-        $ave = (array_sum($priceData)/count($priceData));
+        $max = number_format(max($priceData));
+        $min = number_format(min($priceData));
+        $ave = number_format(floor(array_sum($priceData)/count($priceData)));
         $html = <<<EOF
                 <aside class="box1 mb1em">
                     <p>検索結果の入札済み商品出品価格<br>
-                        最高価格:{$max}<br>
-                        平均価格:{$ave}<br>
-                        最低価格:{$min}
+                        最高価格: {$max}円<br>
+                        平均価格: {$ave}円<br>
+                        最低価格: {$min}円
                     </p>
                 </aside>
 EOF;
