@@ -246,6 +246,7 @@ class baseConf extends basePage{
         }
         return;
     }
+    
     /**
      * 検索結果をスクレーピングしhtmlを作成
      * @access private
