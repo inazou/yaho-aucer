@@ -36,7 +36,7 @@ class basePrice extends basePage{
             $post = filter_input_array(INPUT_POST);
             if(!empty($post)){
                 do{
-                    $data = $this->chkPost($data);
+                    $data = $this->chkPost($post);
                     if($data === FALSE){
                         break;
                     }
