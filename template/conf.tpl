@@ -92,7 +92,7 @@ nav#mainmenu ul li a {
 
 <header>
     <h1>
-        <img src="template/images/yaho-aucer.png" width="150" height="50" alt=""><br>ヤフオク！出品者向け検索サイト
+        <a href="./conf"><img src="template/images/yaho-aucer.png" width="210" height="70" alt=""></a><br>ヤフオク！出品者向け検索サイト
     </h1>
     
 </header>
