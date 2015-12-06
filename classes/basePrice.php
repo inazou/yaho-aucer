@@ -11,7 +11,7 @@ class basePrice extends basePage{
      * 表示用html
      * @var string
      */
-    private $html = "";
+    private $html = '<aside class="box1 mb1em"><p>検索結果の入札済み商品出品価格を表示します。</p></aside>';
     
     /**
      * 次のページ検索フラグ
@@ -206,27 +206,22 @@ EOF;
         }
         //check store
         if(!preg_match("/^[0-2]$/", $data["store"])){
-            $this->result = "エラーが発生しました。";
             return FALSE;
         }
         //check loc_cd
         if(!empty($data["loc_cd"]) && !preg_match("/^[0-9]+$/", $data["loc_cd"])){
-            $this->result = "エラーが発生しました。";
             return FALSE;
         }
         //check buynow
         if(!empty($data["buynow"]) && !preg_match("/^[1]$/", $data["buynow"])){
-            $this->result = "エラーが発生しました。";
             return FALSE;
         }
         //check item_status
         if(!preg_match("/^[0-2]$/", $data["item_status"])){
-            $this->result = "エラーが発生しました。";
             return FALSE;
         }
         //check adf
         if(!preg_match("/^[0-1]$/", $data["adf"])){
-            $this->result = "エラーが発生しました。";
             return FALSE;
         }
         $data['output'] = "xml";

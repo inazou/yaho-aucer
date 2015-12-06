@@ -65,7 +65,7 @@ nav#mainmenu ul li a {
                 );
         
                 function getPrice(){
-                    $("#price").html('<aside class="box1 mb1em"><p>入札済み商品出品価格を取得中<br>※時間がかかる場合は詳細検索で検索結果の件数を絞り込んでください。</p><img src="template/images/load.gif"/></aside>');
+                    $("#price").html('<aside class="box1 mb1em"><p>入札済み商品出品価格を取得中<br>※時間がかかる場合は詳細検索で検索結果の件数を絞り込んでください。</p><div style="text-align: center"><img src="template/images/load.gif"/></div></aside>');
                     $.post(
                         "./price" ,
                         {
