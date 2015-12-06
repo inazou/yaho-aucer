@@ -71,7 +71,8 @@ class basePrice extends basePage{
                     <p>検索結果の入札済み商品出品価格<br>
                         最高価格: {$max}円<br>
                         平均価格: {$ave}円<br>
-                        最低価格: {$min}円
+                        最低価格: {$min}円<br>
+                        ※出品価格が1円の場合は除いています。
                     </p>
                 </aside>
 EOF;
