@@ -22,7 +22,7 @@ class baseCategory extends basePage{
         $referer = $_SERVER["HTTP_REFERER"];
         $url = parse_url($referer);
         $host = $url["host"];
-        if($host == "yahoaucer.jpn.ph"){
+        if($host == "yahoaucer.jpn.ph" || "localhost"){
             $data = $this->chkPost($_POST);
             if(empty($data["val"])){
                 $this->html = "<option value=\"\">カテゴリを選択してください</option>";

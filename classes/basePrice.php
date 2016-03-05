@@ -32,7 +32,7 @@ class basePrice extends basePage{
         $referer = $_SERVER["HTTP_REFERER"];
         $url = parse_url($referer);
         $host = $url["host"];
-        if($host == "yahoaucer.jpn.ph"){
+        if($host == "yahoaucer.jpn.ph" || "localhost"){
             $post = filter_input_array(INPUT_POST);
             if(!empty($post)){
                 do{
